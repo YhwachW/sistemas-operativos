@@ -48,7 +48,7 @@ from grafo import analizar
 analizar('(P1,R1); (R1,P2); (P2,R2); (R2,P1)', {'R1': 1, 'R2': 1}, 'Mi grafo')
 ```
 
-`(Pi,Rj)` = Pi **pide** Rj · `(Rj,Pi)` = Rj **asignado** a Pi. Muestra los ciclos, la reducción del grafo y el estado (seguro, inseguro reversible o irreversible).
+`(Pi,Rj)` = Pi **pide** Rj · `(Rj,Pi)` = Rj **asignado** a Pi. Muestra las tablas de lo que tiene y pide cada proceso, los ciclos (indicando si sus recursos son de 1 o de varias instancias), las 4 condiciones, la reducción del grafo y el estado final. Si hay interbloqueo, separa a los **interbloqueados** de los **bloqueados por arrastre**. Sigue el [procedimiento del capítulo 05](../estudio/05-interbloqueo.md#cómo-analizar-un-grafo-procedimiento-completo).
 
 ## memoria.py: el problema "procesos A, B, C"
 

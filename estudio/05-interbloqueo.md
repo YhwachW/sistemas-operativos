@@ -30,16 +30,164 @@ Cada proceso usa un recurso siempre en el orden **solicitud → uso → liberaci
 
 En los dibujos de esta sección, la flecha **punteada** es una solicitud, la **continua** es una asignación y la **roja** es parte de un ciclo.
 
-### Cómo decidir (reglas del curso)
+### Cómo analizar un grafo (procedimiento completo)
 
-1. **¿Hay ciclos?** Si no hay → **estado seguro**, no hay deadlock.
-2. Si hay un ciclo y **todos** los recursos del ciclo tienen **1 instancia** → **deadlock** ("**inseguro irreversible**").
-3. Si hay un ciclo pero algún recurso tiene **varias instancias** → **puede** haber deadlock ("**inseguro reversible**"). Para saberlo, **reduce el grafo**:
-   - Busca un proceso que **no pida nada**, o cuyas solicitudes se puedan atender con instancias **libres**.
-   - Ese proceso termina y **devuelve todo** lo que tenía (borra sus aristas).
-   - Repite. Si todos terminan, no hay deadlock. Los que nunca pueden terminar están interbloqueados.
+![Cómo decidir con un grafo de recursos: sin ciclos es seguro; un ciclo con recursos de una instancia es interbloqueo; si no, se reduce el grafo y se ve si todos terminan](diagramas/decidir-interbloqueo.svg)
 
-> Comprueba con `python herramientas/grafo.py` (busca ciclos y reduce el grafo).
+#### Paso 1 · Leer y validar el grafo
+
+1. Si te lo dan como vectores `V = {...}`, clasifica cada par:
+   - `(Pi, Rj)` es una **solicitud**: Pi pide Rj.
+   - `(Rj, Pi)` es una **asignación**: Pi tiene una instancia de Rj.
+
+   Dibuja el grafo: también suma puntaje.
+2. Arma dos tablas:
+
+   | Proceso | Tiene | Pide |
+   |---|---|---|
+   | … | recursos con flecha R → P | recursos con flecha P → R |
+
+   | Recurso | Instancias | Asignadas | Libres |
+   |---|---|---|---|
+   | … | dato del enunciado | nº de flechas R → P | instancias − asignadas |
+
+3. **Si no te dan las instancias** ("asuma implícitamente", guía 6): asume el **mínimo posible** = el número de asignaciones que salen de ese recurso (al menos 1), y **escríbelo** como supuesto.
+4. **Valida:**
+   - Si un recurso tiene más asignadas que instancias, los datos son imposibles: dilo.
+   - Si un proceso pide más instancias de las que existen, nunca lo van a atender. Eso es un error del proceso o inanición, no un ciclo.
+
+#### Paso 2 · Contar las instancias libres
+
+`libres = instancias − asignadas`. Si un proceso pide un recurso que **tiene instancias libres**, en realidad no está esperando: el SO se lo daría ahora. Esa solicitud **no traba nada**.
+
+#### Paso 3 · Buscar todos los ciclos
+
+- **Descarta primero** a los procesos que **no piden nada** (no tienen flechas de salida) y a los que **no tienen nada** (no tienen flechas de entrada): ninguno de los dos puede estar en un ciclo.
+- Desde cada proceso que **tiene algo y pide algo**, sigue las flechas: P → (el recurso que pide) → (cada proceso que tiene ese recurso) → (lo que pide ese proceso) → … Si vuelves al proceso de partida, encontraste un ciclo.
+- Escríbelos todos así: `P1 → R2 → P3 → R3 → P1`. Un ciclo **alterna** procesos y recursos y siempre tiene solicitudes y asignaciones.
+
+#### Paso 4 · Decidir con los ciclos
+
+| Lo que encontraste | Qué significa | Siguiente paso |
+|---|---|---|
+| **Ningún ciclo** | No hay espera circular, así que **no puede haber deadlock** | Igual reduce el grafo (paso 5) para dar la **secuencia de término** |
+| **Un ciclo donde todos los recursos tienen 1 instancia** | **Deadlock seguro**: cada recurso del ciclo lo tiene alguien que espera a otro del ciclo. Con 1 instancia, el ciclo es **condición necesaria y suficiente** | Ya puedes concluir. Reduce igual para ver a quiénes más afecta |
+| **Ciclos, pero todos con algún recurso de varias instancias** | El ciclo es **necesario pero no suficiente**: alguien **fuera** del ciclo podría soltar una instancia y romperlo | **Hay que reducir** (paso 5) |
+
+> Basta **un** ciclo de recursos de 1 instancia para que haya deadlock, aunque existan otros ciclos con recursos de varias instancias (guía 7).
+
+#### Paso 5 · Reducir el grafo (algoritmo de detección)
+
+Simula que los procesos terminan **cuando pueden**:
+
+1. Busca un proceso que **no haya terminado** y cuyas solicitudes se puedan atender **todas** con las instancias libres (si pide 2 de un recurso, deben quedar 2 libres).
+2. Ese proceso **termina y devuelve todo** lo que tenía: súmalo a las libres y borra sus flechas.
+3. Repite hasta que nadie más pueda terminar.
+
+Presenta el resultado en una tabla:
+
+| Paso | Libres antes | ¿Quién puede terminar? | Devuelve | Libres después |
+|---|---|---|---|---|
+| 1 | … | … | … | … |
+
+- **Si todos terminan:** no hay deadlock, y el orden en que terminaron es la **secuencia de término**.
+- **Si alguno no termina:** hay deadlock y esos procesos nunca avanzan.
+
+#### Paso 6 · Clasificar a los que no terminan
+
+Mira el grafo **ya reducido**, con las flechas que siguen sin poder atenderse:
+
+- **Interbloqueados:** los que forman un **ciclo de espera** entre ellos, donde cada uno espera algo que tiene otro del grupo. Son la **causa**.
+- **Bloqueados por arrastre:** esperan algo que tiene un interbloqueado, pero **nadie del ciclo los espera a ellos**. No causan el problema; quedan atrapados.
+
+> Formalmente, el algoritmo de detección marca a **todos** los que no terminan. En la prueba conviene distinguir el ciclo que lo causa de los que quedan atrapados: demuestra que entendiste el mecanismo.
+
+#### Paso 7 · Revisar las 4 condiciones en el caso concreto
+
+| Condición | Cómo justificarla con el grafo |
+|---|---|
+| Exclusión mutua | Cada instancia está asignada a **un** proceso a la vez (los recursos no se comparten) |
+| Retención y espera | Nombra los procesos que **tienen algo y piden algo** |
+| Sin expropiación | El SO no le quita el recurso a quien lo tiene; solo se libera al terminar |
+| Espera circular | Escribe el ciclo **de espera** del grafo reducido (paso 6) |
+
+Si **alguna** no se cumple (por ejemplo, nadie retiene y espera, o no hay ciclo), **no puede haber deadlock**.
+
+#### Paso 8 · Concluir con la terminología del curso
+
+| Resultado del análisis | Cómo escribirlo |
+|---|---|
+| Sin ciclos | **Estado seguro**. Secuencia de término: … |
+| Con ciclo, pero la reducción termina a todos | **Inseguro reversible**: hay espera circular, pero P… (fuera del ciclo) libera una instancia y lo rompe |
+| La reducción deja procesos sin terminar | **Inseguro irreversible (interbloqueo)**: interbloqueados … ; bloqueados por arrastre … |
+
+### Casos especiales
+
+- **Pedidos futuros en orden desconocido** (guía 18: "P1 y P4 piden R2, sin saber en qué orden"): agrega las solicitudes y **analiza cada orden posible**. Si **algún** orden lleva a deadlock, el sistema **puede** interbloquearse: dilo y muestra ese orden. Si en todos los órdenes alguien termina, da una secuencia de término.
+- **Un proceso pide varias instancias del mismo recurso:** aparece como varias flechas o un número. En la reducción tiene que haber **todas** libres a la vez.
+- **Procesos o recursos aislados** (sin flechas): no afectan; un proceso aislado termina cuando quiera.
+- **Recurso con instancias libres y una solicitud hacia él:** la solicitud se concede, así que **no es una espera**.
+- **Grafo vs. banquero:** el grafo muestra lo que pasa **ahora** (detección). El banquero razona con los **máximos** declarados (evitación). En la versión de evitación con 1 instancia por recurso se dibujan **aristas de reclamo** (punteadas, P → R: "podría pedirlo"). Una solicitud se concede solo si, al convertir esa arista en asignación, **no se forma un ciclo**.
+
+### Plantilla de respuesta para la prueba
+
+1. Grafo dibujado y tablas "tiene / pide" y "instancias / libres" (con supuestos si faltan datos).
+2. Ciclos encontrados, escritos con flechas, indicando si sus recursos son de 1 o de varias instancias.
+3. Reducción del grafo en tabla, paso a paso.
+4. Las 4 condiciones, aplicadas al caso.
+5. Conclusión: **seguro / inseguro reversible / inseguro irreversible**, con la secuencia de término o la lista de interbloqueados y de bloqueados por arrastre.
+
+> Comprueba con `python herramientas/grafo.py`: muestra las tablas, los ciclos, las 4 condiciones, la reducción y la clasificación final.
+
+### Ejemplo completo: Guía, problema 7
+
+`V = {(P1,R1); (P1,R2); (R3,P1); (R1,P2); (R1,P3); (R1,P4); (R2,P3); (P4,R2); (P3,R3)}`, con R1 = 3, R2 = 1 y R3 = 1 instancias.
+
+![Guía 7: P2 no pide nada y termina; queda el ciclo P1, R2, P3, R3 con recursos de una instancia, así que P1 y P3 están interbloqueados y P4, que espera R2, queda bloqueado por arrastre](diagramas/grafo-guia-7.svg)
+
+**Pasos 1 y 2: tablas.**
+
+| Proceso | Tiene | Pide |
+|---|---|---|
+| P1 | R3 | R1, R2 |
+| P2 | R1 | — |
+| P3 | R1, R2 | R3 |
+| P4 | R1 | R2 |
+
+| Recurso | Instancias | Asignadas | Libres |
+|---|---|---|---|
+| R1 | 3 | 3 (P2, P3, P4) | **0** |
+| R2 | 1 | 1 (P3) | **0** |
+| R3 | 1 | 1 (P1) | **0** |
+
+**Paso 3: ciclos.** P2 no pide nada, así que se descarta.
+
+- `P1 → R2 → P3 → R3 → P1`: **solo recursos de 1 instancia**.
+- `P1 → R1 → P3 → R3 → P1`: R1 tiene 3 instancias.
+- `P1 → R1 → P4 → R2 → P3 → R3 → P1`: R1 tiene 3 instancias.
+
+**Paso 4:** el primer ciclo es todo de 1 instancia, así que **ya hay deadlock seguro**. Reducimos igual para ver a quién afecta.
+
+**Paso 5: reducción.**
+
+| Paso | Libres antes (R1, R2, R3) | ¿Quién puede terminar? | Devuelve | Libres después |
+|---|---|---|---|---|
+| 1 | (0, 0, 0) | **P2** (no pide nada) | 1 de R1 | (1, 0, 0) |
+| 2 | (1, 0, 0) | P1 pide R1 (hay 1 ✓) **y** R2 (hay 0 ✗): no. P3 pide R3 (0 ✗): no. P4 pide R2 (0 ✗): no | — | Nadie más termina |
+
+**Paso 6: clasificar.** No terminan P1, P3 y P4. En el grafo reducido:
+
+- P1 espera R2 (lo tiene P3) y P3 espera R3 (lo tiene P1): ciclo de espera → **P1 y P3 interbloqueados**.
+- P4 espera R2 (lo tiene P3), pero nadie espera a P4 → **P4 bloqueado por arrastre**. La R1 que tiene P4 ya no es el problema: P2 dejó una libre.
+
+**Paso 7: condiciones.**
+
+- Exclusión mutua: R2 y R3 tienen una sola instancia, de uso exclusivo.
+- Retención y espera: P1 (tiene R3, pide R2), P3 (tiene R1 y R2, pide R3) y P4 (tiene R1, pide R2).
+- Sin expropiación: nadie le quita R2 a P3 ni R3 a P1.
+- Espera circular: P1 → R2 → P3 → R3 → P1.
+
+**Paso 8: conclusión.** **Estado inseguro irreversible (interbloqueo).** P1 y P3 están interbloqueados por el ciclo P1 → R2 → P3 → R3 → P1. P4 queda bloqueado por arrastre esperando R2. Solo P2 puede terminar.
 
 ### 3.1 Recuperativa 2024-2, Problema 5 (25 pts)
 
@@ -89,7 +237,7 @@ Del dibujo: R1 (1 instancia), R2 (1 instancia), R3 (2 instancias).
 |---|---|---|
 | **5**: (r1,p1); (r2,p2); (r2,p3); (r3,p1); (r2,p1); (p3,r3) | Solo P3 pide algo (R3, que tiene P1), y P1 no pide nada | **Sin ciclos: seguro.** P1 termina, libera R3 y P3 sigue |
 | **6**: (r1,p1); (r2,p2); (r2,p3); (r3,p1); (p1,r2); (p3,r3) | Ciclo P1 → R2 → P3 → R3 → P1, pero R2 tiene 2 instancias y una la tiene P2, que no pide nada | **Ciclo sin deadlock: inseguro reversible.** P2 termina, libera R2 y P1 la toma; P1 termina, libera R3 y P3 sigue |
-| **7**: R1 = 3, R2 = 1, R3 = 1 | Ciclo P1 → R2 → P3 → R3 → P1, con R2 y R3 de **1 instancia** | **Deadlock: inseguro irreversible.** Solo P2 puede terminar; P1 y P3 quedan interbloqueados, y P4 queda esperando R2 para siempre |
+| **7**: R1 = 3, R2 = 1, R3 = 1 | Ciclo P1 → R2 → P3 → R3 → P1, con R2 y R3 de **1 instancia** | **Deadlock: inseguro irreversible.** P1 y P3 interbloqueados; P4 bloqueado por arrastre. Resuelto paso a paso [arriba](#ejemplo-completo-guía-problema-7) |
 
 ---
 

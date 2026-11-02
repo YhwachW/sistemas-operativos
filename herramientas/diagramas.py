@@ -519,11 +519,93 @@ def diagrama_disco():
             'Guía 20: recorrido del cabezal con los seis algoritmos; SSTF recorre 545 cilindros y FCFS 1087'))
 
 
+# ------------------------------------------------------------------ cómo decidir (flujo)
+def diagrama_decision():
+    W, H = 800, 560
+    o = []
+    cx, bw = 250, 330
+
+    def paso(y, num, l1, l2):
+        s = f'<rect x="{cx - bw / 2}" y="{y}" width="{bw}" height="54" rx="8" class="soft" stroke-width="1.4"/>'
+        s += f'<circle cx="{cx - bw / 2 + 22}" cy="{y + 27}" r="12" class="p0" stroke-width="1.2"/>'
+        s += txt(cx - bw / 2 + 22, y + 31.5, num, 'ink', 12.5, 'middle', 700)
+        s += txt(cx - bw / 2 + 44, y + 23, l1, 'ink', 13.5, 'start', 600)
+        s += txt(cx - bw / 2 + 44, y + 41, l2, 'muted', 12, 'start')
+        return s
+
+    def pregunta(y, l1, l2=None):
+        s = f'<path d="M{cx},{y} L{cx + 150},{y + 32} L{cx},{y + 64} L{cx - 150},{y + 32} Z" class="soft" stroke-width="1.4"/>'
+        s += txt(cx, y + (30 if l2 else 37), l1, 'ink', 13, 'middle', 600)
+        if l2:
+            s += txt(cx, y + 46, l2, 'ink', 13, 'middle', 600)
+        return s
+
+    def resultado(y, cls, l1, l2, l3=None):
+        x, w = 560, 220
+        s = f'<rect x="{x}" y="{y}" width="{w}" height="{66 if l3 else 54}" rx="8" class="{cls}" stroke-width="1.6"/>'
+        s += txt(x + 14, y + 22, l1, 'ink', 13.5, 'start', 700)
+        s += txt(x + 14, y + 40, l2, 'muted', 12, 'start')
+        if l3:
+            s += txt(x + 14, y + 56, l3, 'muted', 12, 'start')
+        return s
+
+    def baja(y1, y2, etiqueta=None):
+        s = f'<path d="M{cx},{y1} L{cx},{y2}" class="ln" stroke-width="1.6" marker-end="url(#fl)"/>'
+        if etiqueta:
+            s += txt(cx + 10, (y1 + y2) / 2 + 4, etiqueta, 'muted', 12, 'start', 600)
+        return s
+
+    def lado(y, x1, etiqueta, cls='ln', mk='fl'):
+        return (f'<path d="M{x1},{y} L556,{y}" class="{cls}" stroke-width="1.6" marker-end="url(#{mk})"/>'
+                + txt((x1 + 556) / 2, y - 8, etiqueta, 'muted', 12, 'middle', 600))
+
+    o.append(paso(20, '1', 'Leer y validar el grafo', 'tabla: qué tiene y qué pide cada proceso'))
+    o.append(baja(74, 92))
+    o.append(paso(94, '2', 'Contar instancias libres', 'libres = instancias − asignadas'))
+    o.append(baja(148, 166))
+    o.append(pregunta(168, '¿Hay ciclos?'))
+    o.append(lado(200, cx + 150, 'no', 'okl', 'flo'))
+    o.append(resultado(173, 'okf', 'Estado seguro', 'no hay espera circular;', 'da una secuencia de término'))
+    o.append(baja(232, 252, 'sí'))
+    o.append(pregunta(254, '¿Algún ciclo con solo', 'recursos de 1 instancia?'))
+    o.append(lado(286, cx + 150, 'sí', 'acc', 'fla'))
+    o.append(resultado(259, 'accf', 'Interbloqueo seguro', 'inseguro irreversible: ese', 'ciclo no se puede romper'))
+    o.append(baja(318, 338, 'no'))
+    o.append(paso(340, '3', 'Reducir el grafo', 'termina quien puede; devuelve todo'))
+    o.append(baja(394, 412))
+    o.append(pregunta(414, '¿Terminan todos?'))
+    o.append(lado(446, cx + 150, 'sí', 'okl', 'flo'))
+    o.append(resultado(419, 'okf', 'Ciclo sin interbloqueo', 'inseguro reversible;', 'la reducción da el orden'))
+    o.append(baja(478, 498, 'no'))
+    o.append(f'<rect x="{cx - bw / 2}" y="500" width="{bw}" height="44" rx="8" class="accf" stroke-width="1.6"/>')
+    o.append(txt(cx, 518, 'Interbloqueo (inseguro irreversible)', 'ink', 13.5, 'middle', 700))
+    o.append(txt(cx, 535, 'separar: en el ciclo vs. bloqueados por arrastre', 'muted', 12, 'middle'))
+    o.append(txt(560, 520, 'En todos los casos: revisar', 'muted', 12, 'start', 600))
+    o.append(txt(560, 537, 'las 4 condiciones de Coffman', 'muted', 12, 'start', 600))
+    guardar('decidir-interbloqueo.svg', svg(W, H, ''.join(o),
+            'Cómo decidir con un grafo de recursos: sin ciclos es seguro; un ciclo con recursos de una instancia es interbloqueo; si no, se reduce el grafo y se ve si todos terminan'))
+
+
+def diagrama_guia7():
+    procesos = {'P1': (110, 200), 'P3': (510, 200), 'P2': (510, 70), 'P4': (570, 330)}
+    recursos = {'R1': (310, 80, 3), 'R2': (310, 310, 1), 'R3': (310, 200, 1)}
+    aristas = [('P1', 'R1', 'pide', False), ('P1', 'R2', 'pide', True), ('R3', 'P1', 'asig', True),
+               ('R1', 'P2', 'asig', False), ('R1', 'P3', 'asig', False), ('R1', 'P4', 'asig', False),
+               ('R2', 'P3', 'asig', True), ('P4', 'R2', 'pide', False), ('P3', 'R3', 'pide', True)]
+    grafo_recursos('grafo-guia-7.svg', procesos, recursos, aristas,
+                   'Guía 7: P2 no pide nada y termina; queda el ciclo P1, R2, P3, R3 con recursos de una instancia, así que P1 y P3 están interbloqueados y P4, que espera R2, queda bloqueado por arrastre',
+                   'Guía · problema 7', ('Interbloqueo: P1 y P3 · P4 por arrastre', 'acct'), W=700, H=440,
+                   anotar=[(540, 66, 'no pide nada:', 'ok'), (540, 82, 'termina y suelta 1 de R1', 'ok'),
+                           (440, 360, 'espera R2 (lo tiene P3):', 'acct'), (440, 376, 'bloqueado por arrastre', 'acct')])
+
+
 if __name__ == '__main__':
     diagramas_planificacion()
     diagrama_estados()
     diagrama_memoria_proceso()
     diagramas_grafos()
+    diagrama_decision()
+    diagrama_guia7()
     diagramas_precedencia()
     diagrama_base_limite()
     diagramas_reemplazo()

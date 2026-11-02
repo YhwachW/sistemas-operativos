@@ -83,12 +83,41 @@ def analizar(V, instancias=None, titulo=None):
                 vivos.remove(p)
                 orden.append(p)
                 cambio = True
+    # las 4 condiciones
+    retienen = [p for p in procs if asign[p] and pide[p]]
+    print('  Condiciones de Coffman:')
+    print('    1. Exclusión mutua      : se asume (recursos no compartibles)')
+    print(f"    2. Retención y espera   : {'sí: ' + ', '.join(retienen) + ' tienen algo y piden más' if retienen else 'NO: nadie tiene y pide a la vez'}")
+    print('    3. Sin expropiación     : se asume (el SO no quita recursos)')
+    print(f"    4. Espera circular      : {'sí (hay ciclo)' if ciclos else 'NO (no hay ciclos)'}")
     if not vivos:
         estado = 'SEGURO (sin interbloqueo)' if not ciclos else 'hay ciclo pero NO hay interbloqueo (inseguro reversible)'
         print(f"  Reducción: todos terminan -> {', '.join(orden)}")
         print(f"  ESTADO: {estado}")
     else:
+        # Grafo de espera del grafo YA REDUCIDO: p espera a q si p pide un recurso que no
+        # alcanza con lo libre y q (que tampoco terminó) tiene instancias de ese recurso.
+        espera = {p: {q for r, n in pide[p].items() if libres[r] < n
+                      for q in vivos if q != p and asign[q].get(r)} for p in vivos}
+
+        def alcanza(a, b, vistos=None):
+            vistos = vistos or set()
+            for x in espera[a]:
+                if x == b:
+                    return True
+                if x not in vistos:
+                    vistos.add(x)
+                    if alcanza(x, b, vistos):
+                        return True
+            return False
+        nucleo = [p for p in vivos if alcanza(p, p)]
+        arrastre = [p for p in vivos if p not in nucleo]
+        libres_txt = ', '.join(f'{r}={libres[r]}' for r in recs)
+        print(f"  Después de la reducción quedan libres: {libres_txt}")
         print(f"  Reducción: terminan {', '.join(orden) or 'ninguno'}; quedan trabados {', '.join(vivos)}")
+        print(f"    - En el ciclo (interbloqueados): {', '.join(nucleo) or '-'}")
+        if arrastre:
+            print(f"    - Bloqueados por arrastre (esperan a un interbloqueado, no forman el ciclo): {', '.join(arrastre)}")
         print('  ESTADO: INTERBLOQUEO (inseguro irreversible)')
     return vivos
 
