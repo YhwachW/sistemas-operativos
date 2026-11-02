@@ -1,0 +1,15 @@
+/* Guía, problema 42 b): imprimir ABBC, ABBC, ...
+   A le da DOS permisos a B (signal(sB) dos veces).
+   Cada B que imprime avisa a C con "listoB"; C espera dos avisos antes de imprimir. */
+semaphore sA = 1;
+semaphore sB = 0;
+semaphore listoB = 0;
+
+void A() { int i; for (i = 1; i <= 4; i++) { wait(sA); cout << "A"; signal(sB); signal(sB); } }
+void B() { int i; for (i = 1; i <= 8; i++) { wait(sB); cout << "B"; signal(listoB); } }
+void C() { int i; for (i = 1; i <= 4; i++) { wait(listoB); wait(listoB); cout << "C "; signal(sA); } }
+
+void main() {
+    cobegin { A(); B(); C(); }
+    cout << endl;
+}

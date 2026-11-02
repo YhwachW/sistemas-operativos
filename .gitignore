@@ -1,0 +1,14 @@
+# jBACI/ es un clon de github.com/motib/jbaci (repo aparte) y contiene la app Mini BACI
+# (github.com/YhwachW/mini-baci). Tus ejercicios .cm están copiados en estudio/programas/ejercicios-jbaci/
+jBACI/
+
+# Archivos que genera jBACI al compilar y ejecutar
+*.pco
+*.lst
+*.his
+*.pob
+
+# Restos de otras herramientas
+.archify/
+__pycache__/
+*.pyc

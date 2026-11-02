@@ -1,0 +1,18 @@
+/* Guía, problema 38: grafo de precedencia con semáforos (versión cobegin).
+   Aristas: S1->S3, S1->S4, S2->S4, S2->S5, S3->S6, S4->S6, S4->S7, S5->S7
+   Regla: un semáforo (en 0) por cada arista. Cada sentencia hace wait por
+   cada arista que le LLEGA y signal por cada arista que SALE de ella. */
+binarysem a13 = 0, a14 = 0, a24 = 0, a25 = 0, a36 = 0, a46 = 0, a47 = 0, a57 = 0;
+
+void S1() { cout << "S1 "; signal(a13); signal(a14); }
+void S2() { cout << "S2 "; signal(a24); signal(a25); }
+void S3() { wait(a13); cout << "S3 "; signal(a36); }
+void S4() { wait(a14); wait(a24); cout << "S4 "; signal(a46); signal(a47); }
+void S5() { wait(a25); cout << "S5 "; signal(a57); }
+void S6() { wait(a36); wait(a46); cout << "S6 "; }
+void S7() { wait(a47); wait(a57); cout << "S7 "; }
+
+void main() {
+    cobegin { S1(); S2(); S3(); S4(); S5(); S6(); S7(); }
+    cout << endl;
+}

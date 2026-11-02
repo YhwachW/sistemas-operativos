@@ -1,0 +1,36 @@
+/*
+ 02-trafico-cruce-uno-a-la-vez.cm : 4 autos (procesos) quieren pasar por un cruce.
+ En el cruce cabe UN solo auto a la vez; si entran dos, chocan.
+ El semaforo "cruce" deja pasar a un auto por vez.
+
+   cruce = 1  -> luz verde: el cruce esta libre
+   cruce = 0  -> luz roja: hay un auto cruzando; el que llega, espera
+*/
+
+binarysem cruce = 1;
+
+void autoQueCruza(int id) {
+    int tramo;
+    cout << "Auto " << id << " llega al cruce." << endl;
+
+    wait(cruce);
+
+    cout << "Auto " << id << " tiene VERDE y entra al cruce." << endl;
+    for (tramo = 1; tramo <= 3; tramo++) {
+        cout << "Auto " << id << " cruzando, tramo " << tramo << endl;
+    }
+    cout << "Auto " << id << " sale del cruce." << endl;
+
+    signal(cruce);
+}
+
+void main() {
+    cobegin {
+        autoQueCruza(1);
+        autoQueCruza(2);
+        autoQueCruza(3);
+        autoQueCruza(4);
+    }
+
+    cout << "Todos los autos cruzaron sin chocar." << endl;
+}

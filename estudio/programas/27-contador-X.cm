@@ -1,0 +1,21 @@
+/* Guía 27 / Examen 2026-1: varios procesos incrementan X (que vale 34657).
+   Sin exclusión mutua, dos procesos pueden leer 34657 a la vez y ambos guardar 34658:
+   se pierde una línea. Con un binarysem alrededor de X = X + 1 nunca pasa.
+   Cambia CON_MUTEX a 0 para ver la condición de carrera. */
+const int CON_MUTEX = 1;
+int X = 34657;
+binarysem mutex = 1;
+
+void terminal(int id) {
+    int i;
+    for (i = 1; i <= 10; i++) {
+        if (CON_MUTEX) wait(mutex);
+        X = X + 1;                      /* sección crítica */
+        if (CON_MUTEX) signal(mutex);
+    }
+}
+
+void main() {
+    cobegin { terminal(1); terminal(2); terminal(3); }
+    cout << "X = " << X << " (debería ser 34687)" << endl;
+}

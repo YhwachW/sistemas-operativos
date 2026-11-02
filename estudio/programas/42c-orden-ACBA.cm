@@ -1,0 +1,21 @@
+/* Guía, problema 42 c): imprimir ACBA, ACBA, ...
+   A aparece dos veces por vuelta: la primera le pasa el turno a C,
+   la segunda (después de B) cierra la vuelta y deja a A listo para la siguiente. */
+binarysem sA = 1;
+binarysem sB = 0;
+binarysem sC = 0;
+
+void A() {
+    int i;
+    for (i = 1; i <= 4; i++) {
+        wait(sA); cout << "A"; signal(sC);     /* primera A de la vuelta */
+        wait(sA); cout << "A "; signal(sA);    /* segunda A: cierra la vuelta */
+    }
+}
+void B() { int i; for (i = 1; i <= 4; i++) { wait(sB); cout << "B"; signal(sA); } }
+void C() { int i; for (i = 1; i <= 4; i++) { wait(sC); cout << "C"; signal(sB); } }
+
+void main() {
+    cobegin { A(); B(); C(); }
+    cout << endl;
+}

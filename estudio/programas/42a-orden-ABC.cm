@@ -1,0 +1,15 @@
+/* Guía, problema 42 a): imprimir ABC, ABC, ABC, ...
+   Idea: un semáforo por proceso. Cada uno espera SU turno y le pasa el turno al siguiente.
+   sA empieza en 1 (A parte), sB y sC en 0. */
+binarysem sA = 1;
+binarysem sB = 0;
+binarysem sC = 0;
+
+void A() { int i; for (i = 1; i <= 4; i++) { wait(sA); cout << "A"; signal(sB); } }
+void B() { int i; for (i = 1; i <= 4; i++) { wait(sB); cout << "B"; signal(sC); } }
+void C() { int i; for (i = 1; i <= 4; i++) { wait(sC); cout << "C "; signal(sA); } }
+
+void main() {
+    cobegin { A(); B(); C(); }
+    cout << endl;
+}

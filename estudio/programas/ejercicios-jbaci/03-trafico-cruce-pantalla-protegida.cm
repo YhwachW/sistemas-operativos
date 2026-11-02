@@ -1,0 +1,53 @@
+/*
+ 03-trafico-cruce-pantalla-protegida.cm : igual que 02-trafico-cruce-uno-a-la-vez.cm,
+ pero los mensajes ya no se mezclan.
+
+ Problema de 02-trafico-cruce-uno-a-la-vez.cm: jBACI puede cambiar de proceso A MITAD de un cout,
+ y la pantalla (Console) tambien es un recurso compartido.
+
+ Solucion: un segundo semaforo, "pantalla", para que un solo auto
+ escriba a la vez. Cada cout queda entre wait(pantalla) y signal(pantalla).
+
+   cruce    -> protege el cruce   (un auto cruzando a la vez)
+   pantalla -> protege la Console (un auto escribiendo a la vez)
+*/
+
+binarysem cruce = 1;
+binarysem pantalla = 1;
+
+void autoQueCruza(int id) {
+    int tramo;
+
+    wait(pantalla);
+    cout << "Auto " << id << " llega al cruce." << endl;
+    signal(pantalla);
+
+    wait(cruce);
+
+    wait(pantalla);
+    cout << "Auto " << id << " tiene VERDE y entra al cruce." << endl;
+    signal(pantalla);
+
+    for (tramo = 1; tramo <= 3; tramo++) {
+        wait(pantalla);
+        cout << "Auto " << id << " cruzando, tramo " << tramo << endl;
+        signal(pantalla);
+    }
+
+    wait(pantalla);
+    cout << "Auto " << id << " sale del cruce." << endl;
+    signal(pantalla);
+
+    signal(cruce);
+}
+
+void main() {
+    cobegin {
+        autoQueCruza(1);
+        autoQueCruza(2);
+        autoQueCruza(3);
+        autoQueCruza(4);
+    }
+
+    cout << "Todos los autos cruzaron sin chocar." << endl;
+}

@@ -1,0 +1,40 @@
+/* Guía, problema 41 (versión chica: capacidad 3 y 6 autos para verlo rápido).
+   cupos    (semaphore = capacidad): cuántos autos más pueden entrar.
+   barrera  (binarysem): pasa un auto a la vez por la máquina y la barrera.
+   guardia  (binarysem): el único guardia atiende a un auto a la vez.
+   pantalla (binarysem): para que los mensajes no se mezclen. */
+const int CAPACIDAD = 3;
+semaphore cupos = CAPACIDAD;
+binarysem barrera = 1;
+binarysem guardia = 1;
+binarysem pantalla = 1;
+int dentro = 0;
+int maximo = 0;
+
+void vehiculo(int id) {
+    wait(barrera);                       /* 1-3: botón, ticket y barrera, de a uno */
+    wait(cupos);                         /*      la barrera sube solo si hay cupo */
+    wait(pantalla);
+    dentro = dentro + 1;
+    if (dentro > maximo) maximo = dentro;
+    cout << "Auto " << id << " entra (" << dentro << " dentro)" << endl;
+    signal(pantalla);
+    signal(barrera);                     /*      la barrera baja para el siguiente */
+
+    wait(guardia);                       /* 4: el guardia lo guía a estacionar */
+    wait(pantalla); cout << "  guardia estaciona al auto " << id << endl; signal(pantalla);
+    signal(guardia);
+
+    /* 5: mira los buitres y corre por el pasto (no necesita sincronización) */
+
+    wait(pantalla);                      /* 6: sale del parque */
+    dentro = dentro - 1;
+    cout << "Auto " << id << " sale" << endl;
+    signal(pantalla);
+    signal(cupos);                       /*    libera su cupo */
+}
+
+void main() {
+    cobegin { vehiculo(1); vehiculo(2); vehiculo(3); vehiculo(4); vehiculo(5); vehiculo(6); }
+    cout << "Máximo de autos dentro a la vez: " << maximo << endl;
+}

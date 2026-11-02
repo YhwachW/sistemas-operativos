@@ -1,0 +1,61 @@
+/*
+ 04-trafico-turnos-dos-calles.cm : un cruce con DOS calles que se turnan, como un semaforo real.
+
+   Calle Norte-Sur (NS): autos 1, 2, 3
+   Calle Este-Oeste (EO): autos 4, 5, 6
+
+ Semaforos:
+   verdeNS = 1  -> Norte-Sur empieza con luz verde
+   verdeEO = 0  -> Este-Oeste empieza en rojo
+   pantalla     -> un solo auto escribe a la vez en la Console
+
+ Cada auto espera SU verde, cruza y le da el verde a la OTRA calle.
+ Resultado: los autos cruzan alternados NS, EO, NS, EO, NS, EO.
+
+ Como verdeNS + verdeEO vale siempre 1 (o 0 mientras alguien cruza),
+ nunca hay dos autos en el cruce a la vez.
+
+ IMPORTANTE: las dos calles deben tener la misma cantidad de autos.
+ Si una tiene mas, sus autos de sobra esperan un verde que nunca llega.
+*/
+
+binarysem verdeNS = 1;
+binarysem verdeEO = 0;
+binarysem pantalla = 1;
+
+void autoNS(int id) {
+    wait(pantalla);
+    cout << "Auto " << id << " (Norte-Sur) llega y espera su verde." << endl;
+    signal(pantalla);
+
+    wait(verdeNS);                         /* espera verde para Norte-Sur */
+
+    wait(pantalla);
+    cout << "  >> VERDE Norte-Sur: cruza el auto " << id << endl;
+    signal(pantalla);
+
+    signal(verdeEO);                       /* le da el verde a Este-Oeste */
+}
+
+void autoEO(int id) {
+    wait(pantalla);
+    cout << "Auto " << id << " (Este-Oeste) llega y espera su verde." << endl;
+    signal(pantalla);
+
+    wait(verdeEO);                         /* espera verde para Este-Oeste */
+
+    wait(pantalla);
+    cout << "  >> VERDE Este-Oeste: cruza el auto " << id << endl;
+    signal(pantalla);
+
+    signal(verdeNS);                       /* le da el verde a Norte-Sur */
+}
+
+void main() {
+    cobegin {
+        autoNS(1); autoNS(2); autoNS(3);
+        autoEO(4); autoEO(5); autoEO(6);
+    }
+
+    cout << "Todos los autos cruzaron, turnandose." << endl;
+}

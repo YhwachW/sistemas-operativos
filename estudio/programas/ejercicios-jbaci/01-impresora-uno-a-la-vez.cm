@@ -1,0 +1,26 @@
+binarysem impresora = 1;
+
+void persona(int id) {
+    int hoja;
+    cout << "Persona " << id << " quiere imprimir." << endl;
+
+    wait(impresora);
+
+    cout << "Persona " << id << " esta imprimiendo." << endl;
+    for (hoja = 1; hoja <= 5; hoja++) {
+        cout << "Persona " << id << " imprimiendo hoja " << hoja << endl;
+    }
+    cout << "Persona " << id << " libera la impresora." << endl;
+
+    signal(impresora);
+}
+
+void main() {
+    cobegin {
+        persona(1);
+        persona(2);
+        persona(3);
+    }
+
+    cout << "Todos los procesos han terminado." << endl;
+}

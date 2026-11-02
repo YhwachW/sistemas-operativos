@@ -1,0 +1,13 @@
+/* Guía, problema 24: P2 puede ejecutar e solo si P1 ya ejecutó a, o P3 ya ejecutó g.
+   Basta UN semáforo que empieza en 0: el primero que haga a o g lo sube a 1 y
+   P2 puede pasar. Por eso es un semáforo general (puede llegar a 2) y no binario. */
+semaphore permiso = 0;
+
+void P1() { cout << "a "; signal(permiso); cout << "b "; cout << "c "; }
+void P2() { cout << "d "; wait(permiso); cout << "e "; cout << "f "; }
+void P3() { cout << "g "; signal(permiso); cout << "h "; cout << "i "; }
+
+void main() {
+    cobegin { P1(); P2(); P3(); }
+    cout << endl;
+}

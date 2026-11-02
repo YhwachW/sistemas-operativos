@@ -1,0 +1,36 @@
+/* Guía, problema 34: el productor hace P(exclusion) ANTES de P(vacios).
+   Si el buffer está lleno, el productor se queda dormido en vacios
+   CON la exclusión tomada, y el consumidor no puede entrar a sacar nada:
+   deadlock. La corrección es invertir el orden: primero P(vacios), después P(exclusion). */
+const int N = 2;
+const int CORREGIDO = 0;               /* pon 1 para ver la versión correcta */
+binarysem exclusion = 1;
+semaphore vacios = N;
+semaphore llenos = 0;
+int enBuffer = 0;
+
+void productor() {
+    int i;
+    for (i = 1; i <= 6; i++) {
+        if (CORREGIDO) { wait(vacios); wait(exclusion); }
+        else           { wait(exclusion); wait(vacios); }
+        enBuffer++;
+        cout << "produce " << i << " (buffer: " << enBuffer << ")" << endl;
+        signal(exclusion);
+        signal(llenos);
+    }
+}
+
+void consumidor() {
+    int i;
+    for (i = 1; i <= 6; i++) {
+        wait(llenos);
+        wait(exclusion);
+        enBuffer--;
+        cout << "  consume (buffer: " << enBuffer << ")" << endl;
+        signal(exclusion);
+        signal(vacios);
+    }
+}
+
+void main() { cobegin { productor(); consumidor(); } }

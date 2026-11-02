@@ -1,0 +1,67 @@
+Cómo usar jBACI - notas para el presentador
+
+Diapositiva 1: Cómo usar jBACI
+Presentación sobre jBACI, el simulador de concurrencia de Moti Ben-Ari. Primero vemos qué es, después los dos modos (editar y ejecutar), cada cuadro de la ventana, y al final corremos el ejemplo 02 del cruce de autos.
+
+Diapositiva 2: Un simulador para ver procesos concurrentes paso a paso
+jBACI junta tres piezas en una sola ventana: un editor, el compilador BACI y un intérprete. La gracia es que podemos ver la ejecución de varios procesos al mismo tiempo, pausar, avanzar una línea, y ver quién está bloqueado en un semáforo. Se abre con jbaci.cmd o con java -jar jbaci.jar.
+
+Diapositiva 3: jBACI siempre está en modo Edit o en modo Run
+Esto es clave para entender la interfaz: hay dos estados. En Edit solo funcionan los botones de archivo, edición y compilar. En Run solo funcionan los de ejecución. Si un botón aparece gris, es porque estamos en el otro modo. File/Exit y Help/About funcionan siempre.
+
+Diapositiva 4: Los botones del modo edición
+El modo edición es como un bloc de notas. Lo importante: la extensión del archivo decide el compilador. Un .cm usa el compilador de C-- y un .pm el de Pascal. Por eso nuestros archivos se llaman 02-trafico-cruce-uno-a-la-vez.cm.
+
+Diapositiva 5: Compilar crea dos archivos nuevos
+Al presionar Compile se generan el .pco y el .lst junto al archivo. El .lst es útil para explicar: muestra que wait(cruce) está en la dirección 5 del PCode y signal(cruce) en la 39. Todo lo que está entre esas dos direcciones es la sección crítica.
+
+Diapositiva 6: El mapa de la ventana de ejecución
+Este es el esquema de la pantalla cuando ejecutamos. Arriba la barra de botones (1). A la izquierda la tabla de procesos (2). El resto es un escritorio donde aparecen las ventanas de cada proceso (3) y las ventanas del sistema (4). La barra que separa izquierda y derecha se puede arrastrar. Ahora vemos cada cuadro en detalle.
+
+Diapositiva 7: Controlas la ejecución a tu ritmo
+Para presentar conviene usar Step Source: cada clic avanza una línea y se ve cómo cambian las cosas. Un detalle: un paso de Source es una línea completa del archivo, aunque tenga varias instrucciones. Next y Previous cambian el proceso resaltado en la tabla, que es el que ejecutará la siguiente instrucción.
+
+Diapositiva 8: Una fila por proceso, con su estado
+Este es el cuadro más importante para hablar de semáforos. Cuando un proceso hace wait sobre un semáforo en 0, la columna Suspended se llena: ahí se ve que está bloqueado. Para elegir qué proceso avanza, se hace clic en su fila o se usan Next y Previous. Las columnas Priority y Atomic son más avanzadas y están en la documentación de BACI. La tabla de la derecha es un ejemplo para ilustrar; los nombres exactos los verán en la demo.
+
+Diapositiva 9: Cada proceso tiene su propia ventana
+La ventana de proceso tiene tres pestañas. Code es la principal y se divide en tres partes: Source muestra todo el programa con una flecha verde en la próxima línea de este proceso; PCode muestra las instrucciones de la línea actual; Variables muestra las variables locales, como id y tramo. Console muestra solo lo que imprimió este proceso. Details muestra la pila, útil solo si se sigue el PCode. Por defecto, jBACI trae al frente la ventana del proceso que se está ejecutando. El contenido de este dibujo es ilustrativo.
+
+Diapositiva 10: Cuatro ventanas que ven el programa completo
+Las ventanas del sistema se prenden o apagan desde el menú Window. Console junta la salida de todos. Globals es la más útil para nuestro ejemplo, porque cruce es global y se ve su valor cambiar entre 1 y 0. History sirve para ver en qué orden se intercalaron los procesos. Linda solo importa si usamos tuplas, no en este ejemplo. Ojo: en Pascal las globales son locales del programa principal, así que Globals sale vacía.
+
+Diapositiva 11: Un breakpoint frena el programa en una línea
+Los breakpoints sirven para no tener que dar cien clics de Step. Se pone un punto rojo en una línea, se presiona Go y el programa corre hasta ahí. En la demo podemos poner uno en signal(cruce) para ver cómo el siguiente auto se desbloquea.
+
+Diapositiva 12: Opciones que cambian cómo se ve la ejecución
+Pause on Process Swap es muy útil para la presentación: con Go, el programa se detiene cada vez que cambia de proceso, así se ve el intercalado sin dar clic en cada paso. Write History File crea un archivo .his; si se cambia esta opción hay que presionar Run de nuevo para que tome efecto.
+
+Diapositiva 13: Lo que vimos en clases, visible en jBACI
+Esta diapositiva conecta jBACI con los apuntes. En el capítulo 3 vimos los estados del proceso: nuevo, listo, en ejecución, en espera y terminado. En jBACI la tabla de procesos muestra justamente eso; un proceso bloqueado en un wait está en espera. El PCB guarda el contador de programa: en jBACI es la flecha verde. El cambio de contexto, que guarda el estado de un proceso y carga el de otro, se puede ver con Pause on Process Swap. Y del capítulo 5: el planificador decide quién usa la CPU; jBACI elige al azar entre los listos, por eso el orden cambia cada vez.
+
+Diapositiva 14: Cuatro autos, un cruce, un semáforo
+Este es el ejemplo 02, resumido. Cada auto es un proceso. El semáforo cruce empieza en 1. El primer auto que hace wait lo baja a 0 y entra; los que llegan después se bloquean. Al salir, signal deja pasar al siguiente. Lo que hay entre wait y signal es la sección crítica: nunca hay dos autos ahí.
+
+Diapositiva 15: Seis pasos para correr el ejemplo
+Este es el guion de la demo en vivo. Si hay poco tiempo, en el paso 4 se puede activar Options, Pause on Process Swap, y usar Go: el programa se detiene cada vez que cambia de auto. El orden en que llegan los autos puede cambiar de una ejecución a otra, porque el intérprete elige al azar qué proceso avanza.
+
+Diapositiva 16: Tres cuadros cuentan la historia del semáforo
+Mientras se avanza, hay que mostrar estos tres cuadros. En Globals, cruce cambia de 1 a 0. En la tabla de procesos, los autos que llegaron después aparecen suspendidos. En Console, entre el entra y el sale de un auto no se mete ningún tramo de otro auto. Las líneas de llega al cruce sí pueden aparecer en cualquier momento, porque están fuera del wait: eso no es un choque.
+
+Diapositiva 17: Sin wait y signal, los autos chocan
+Este experimento convence a cualquiera de para qué sirve el semáforo. Se comentan wait y signal, se compila y se ejecuta. Ahora en Console aparecen tramos de varios autos mezclados: Auto 1 cruzando tramo 2, Auto 3 cruzando tramo 1. Eso es el choque. Volvemos a poner las líneas y todo se ordena.
+
+Diapositiva 18: Dos semáforos que se turnan con una variable
+Este ejemplo lo hizo un compañero a mano. Resuelve el mismo problema del cruce, pero sin semáforos: usa una variable compartida turno. Cada proceso da vueltas en un while preguntando si ya es su turno; cuando lo es, imprime su ciclo y le pasa el turno al otro. Es correcto: nunca hay dos verdes. Pero el proceso que espera no se bloquea, sigue gastando CPU preguntando. Eso se llama espera activa. Además el programa nunca termina, porque el while es infinito: en jBACI hay que detenerlo con Pause.
+
+Diapositiva 19: Espera activa contra semáforo: la tabla de procesos lo muestra
+Para la demo: corran trafficlight.cm y miren la tabla de procesos. Los dos procesos siempre están activos, nunca suspendidos, y en History se ve el mismo if una y otra vez: eso es la espera activa, CPU gastada sin hacer nada útil. Después corran el 04, que resuelve lo mismo con dos semáforos: el que espera queda suspendido y no consume CPU. Por eso los sistemas operativos usan semáforos y no espera activa.
+
+Diapositiva 20: Estacionamiento de 5 cupos con una sola barrera
+Este problema salió en el examen 2025-1. Un edificio con estacionamiento para 5 autos y una sola barrera. La pauta lo resuelve en Python y en C con pthreads; aquí está traducido a C-- para correrlo en jBACI. Usa los dos tipos de semáforo: cupos es un semáforo general que parte en 5 y cuenta los espacios libres; barrera es binario y deja pasar un auto a la vez. Con 7 autos, dos tienen que esperar.
+
+Diapositiva 21: Las mismas operaciones con otro nombre
+Esta tabla sirve para estudiar: lo que en la pauta aparece como acquire o sem_wait, en jBACI es wait; release o sem_post es signal; el Lock o mutex es un semáforo binario; y crear hilos es cobegin. Al correrlo en jBACI, mostrar Globals: la variable dentro sube hasta 5 y nunca la pasa, y en la tabla de procesos los autos 6 y 7, o los que lleguen tarde, aparecen suspendidos esperando cupo.
+
+Diapositiva 22: jBACI en una diapositiva
+Para cerrar: jBACI sirve para ver lo que normalmente no se ve en la concurrencia. Con la tabla de procesos y Globals se observa cómo el semáforo bloquea y libera a los procesos. Preguntas.

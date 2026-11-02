@@ -1,0 +1,56 @@
+/*
+ 05-estacionamiento-examen-2025-1.cm
+ Basado en el Problema 4 de la Pauta del Examen de Sistemas Operativos 2025-1
+ (alli resuelto en Python y en C con pthreads; aqui en C-- para jBACI).
+
+ Un edificio tiene un estacionamiento con capacidad para 5 autos y UNA sola
+ barrera, por la que pasa un auto a la vez (para entrar o para salir).
+ Cada auto es un proceso.
+
+ Semaforos:
+   cupos   = 5  -> semaforo GENERAL (contador): espacios libres.
+                   Si llegan mas de 5, los que sobran esperan.
+   barrera = 1  -> semaforo BINARIO: un solo auto en la barrera.
+                   Tambien protege la variable "dentro" y la Console.
+
+ Equivalencias con la pauta:
+   Python: Semaphore(5).acquire() / release()   ->  wait(cupos) / signal(cupos)
+   C:      sem_wait / sem_post                  ->  wait(cupos) / signal(cupos)
+   C:      pthread_mutex_lock / unlock          ->  wait(barrera) / signal(barrera)
+*/
+
+semaphore cupos = 5;
+binarysem barrera = 1;
+int dentro = 0;
+
+void autoResidente(int id) {
+    int t;
+
+    wait(cupos);                       /* espera un espacio libre */
+
+    wait(barrera);                     /* entra por la barrera */
+    dentro = dentro + 1;
+    cout << "Auto " << id << " entra.  Autos dentro: " << dentro << endl;
+    signal(barrera);
+
+    for (t = 1; t <= 5; t++) {         /* tiempo estacionado */
+        dentro = dentro;
+    }
+
+    wait(barrera);                     /* sale por la barrera */
+    dentro = dentro - 1;
+    cout << "Auto " << id << " sale.   Autos dentro: " << dentro << endl;
+    signal(barrera);
+
+    signal(cupos);                     /* libera su espacio */
+}
+
+void main() {
+    cobegin {
+        autoResidente(1); autoResidente(2); autoResidente(3);
+        autoResidente(4); autoResidente(5); autoResidente(6);
+        autoResidente(7);
+    }
+
+    cout << "Estacionamiento vacio. Autos dentro: " << dentro << endl;
+}

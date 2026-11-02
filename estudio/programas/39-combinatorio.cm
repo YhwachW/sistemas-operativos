@@ -1,0 +1,24 @@
+/* Guía, problema 39: (n k) = n(n-1)...(n-k+1) / k!
+   P1 calcula el numerador en x; P2 calcula k! en y y muestra x/y.
+   P2 no puede dividir hasta que P1 termine: semáforo "xlisto" que empieza en 0. */
+int n = 6;
+int k = 2;
+int x;
+semaphore xlisto = 0;
+
+void P1() {
+    int i;
+    x = 1;
+    for (i = n - k + 1; i <= n; i++) x = x * i;
+    signal(xlisto);                     /* aviso: x ya está calculado */
+}
+
+void P2() {
+    int y, j;
+    y = 1;
+    for (j = 2; j <= k; j++) y = y * j;
+    wait(xlisto);                       /* espero a que P1 termine */
+    cout << "Resultado: " << x / y << endl;
+}
+
+void main() { cobegin { P1(); P2(); } }

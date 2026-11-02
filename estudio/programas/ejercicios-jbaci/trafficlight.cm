@@ -1,0 +1,32 @@
+binarysem turno = 1; //1 para el Sem�foro A, 2 para el Sem�foro B
+
+void semaforoA() {
+    while (1) {
+        if (turno == 0) {
+            cout << "[Semaforo A]: VERDE" << endl;
+            cout << "[Semaforo A]: AMARILLO" << endl;
+            cout << "[Semaforo A]: ROJO" << endl;
+            
+            turno = 2;
+        }
+    }
+}
+
+void semaforoB() {
+    while (1) {
+        if (turno == 1) {
+            cout << "[Semaforo B]: VERDE" << endl;
+            cout << "[Semaforo B]: AMARILLO" << endl;
+            cout << "[Semaforo B]: ROJO" << endl;
+            
+            turno = 1;
+        }
+    }
+}
+
+void main() {
+cobegin {
+        semaforoA();
+        semaforoB();
+    }
+}
