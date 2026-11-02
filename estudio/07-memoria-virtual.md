@@ -81,13 +81,7 @@ Cada falla es una **entrada** (leer de disco) y cada reemplazo es una **salida**
 
 Cadena 7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2, 1, 2, 0, 1, 7, 0, 1. Acceso = 20 ms, transferencia = 30 ms, ejecución por página = 60 ms.
 
-```
-Ref.    7 0 1 2 0 3 0 4 2 3 0 3 2 1 2 0 1 7 0 1
-Marco1  7 7 7 2 2 2 2 4 4 4 0 0 0 1 1 1 1 1 1 1
-Marco2    0 0 0 0 0 0 0 0 3 3 3 3 3 3 0 0 0 0 0
-Marco3      1 1 1 3 3 3 2 2 2 2 2 2 2 2 2 7 7 7
-Falla   * * * *   *   * * * *     *   *   *
-```
+![LRU con 3 marcos para la cadena de la P2 2025-2: 12 fallas y 9 reemplazos](diagramas/lru-2025-2.svg)
 
 Por ejemplo, al llegar el 2 (4ª referencia), los marcos tienen 7, 0, 1. El que hace más tiempo que no se usa es el **7**, así que sale el 7.
 
@@ -99,13 +93,7 @@ Por ejemplo, al llegar el 2 (4ª referencia), los marcos tienen 7, 0, 1. El que 
 
 Cadena 1, 1, 1, 2, 0, 1, 2, 0, 2, 4, 5, 0, 6, 5, 4, 1, 3, 5, 2, 4, 6. Acceso = 1,6 ms, transferencia = 22 ms.
 
-```
-Ref.    1 1 1 2 0 1 2 0 2 4 5 0 6 5 4 1 3 5 2 4 6
-Marco1  1 1 1 1 1 1 1 1 1 1 5 5 5 5 5 5 5 5 2 2 2
-Marco2        2 2 2 2 2 2 4 4 4 4 4 4 4 4 4 4 4 6
-Marco3          0 0 0 0 0 0 0 0 6 6 6 1 3 3 3 3 3
-Falla   *     * *         * *   *     * *   *   *
-```
+![Óptimo con 3 marcos para la cadena de la P2 2024-2: 10 fallas y 7 reemplazos](diagramas/optimo-2024-2.svg)
 
 Por ejemplo, al llegar el 4 (10ª referencia), los marcos tienen 1, 2, 0. Mirando hacia adelante, el 0 vuelve a usarse 2 referencias después, el 1 a las 6 y el 2 recién a las 9. El que se usa **más tarde** es el **2**, así que sale el 2.
 
@@ -115,13 +103,7 @@ Por ejemplo, al llegar el 4 (10ª referencia), los marcos tienen 1, 2, 0. Mirand
 
 Cadena 1, 3, 2, 0, 1, 2, 0, 2, 4, 5, 0, 6, 5, 4, 1, 3, 5, 2, 4, 6. Acceso = 0,5 ns, transferencia = 0,6 ns.
 
-```
-Ref.    1 3 2 0 1 2 0 2 4 5 0 6 5 4 1 3 5 2 4 6
-Marco1  1 1 1 0 0 0 0 0 0 5 5 5 5 5 5 3 3 3 4 4
-Marco2    3 3 3 1 1 1 1 4 4 4 6 6 6 1 1 1 2 2 2
-Marco3      2 2 2 2 2 2 2 2 0 0 0 4 4 4 5 5 5 6
-Falla   * * * * *       * * * *   * * * * * * *
-```
+![LRU con 3 marcos para la cadena del examen 2025-1: 16 fallas y 13 reemplazos](diagramas/lru-2025-1.svg)
 
 - **Fallas: 16. Reemplazos: 13.** Total 29. **Tiempo** = 29 × 1,1 = **31,9 ns**.
 
@@ -129,13 +111,7 @@ Falla   * * * * *       * * * *   * * * * * * *
 
 Cadena 1, 2, 2, 7, 1, 2, 1, 2, 4, 5, 0, 6, 5, 4, 1, 3, 5, 2, 4, 6. Acceso = 0,5 ns, transferencia = 0,6 ns.
 
-```
-Ref.    1 2 2 7 1 2 1 2 4 5 0 6 5 4 1 3 5 2 4 6
-Marco1  1 1 1 1 1 1 1 1 1 5 5 5 5 5 5 3 3 3 4 4
-Marco2    2 2 2 2 2 2 2 2 2 0 0 0 4 4 4 5 5 5 6
-Marco3        7 7 7 7 7 4 4 4 6 6 6 1 1 1 2 2 2
-Falla   * *   *         * * * *   * * * * * * *
-```
+![LRU con 3 marcos para la cadena de la recuperativa 2026-1: 14 fallas y 11 reemplazos](diagramas/lru-recup-2026-1.svg)
 
 - **Fallas: 14. Reemplazos: 11.** Total 25. **Tiempo** = 25 × 1,1 = **27,5 ns**.
 

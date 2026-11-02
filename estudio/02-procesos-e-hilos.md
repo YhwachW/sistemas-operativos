@@ -11,32 +11,11 @@ Un mismo programa puede dar origen a varios procesos (por ejemplo, dos ventanas 
 
 ### Un proceso en memoria
 
-```
-dirección alta  ┌──────────────┐
-                │    pila      │  ← variables locales, parámetros, retorno (crece hacia abajo)
-                │      ↓       │
-                │      ↑       │
-                │    heap      │  ← memoria dinámica (malloc / new) (crece hacia arriba)
-                ├──────────────┤
-                │    datos     │  ← variables globales
-                ├──────────────┤
-                │  texto       │  ← el código
-dirección baja  └──────────────┘
-```
+![Un proceso en memoria: texto y datos abajo, heap que crece hacia arriba, pila que crece hacia abajo](diagramas/memoria-proceso.svg)
 
 ## 2. Estados de un proceso
 
-```mermaid
-stateDiagram-v2
-    [*] --> Nuevo
-    Nuevo --> Listo : admitido
-    Listo --> Ejecucion : el planificador lo despacha
-    Ejecucion --> Listo : interrupción / fin del quantum
-    Ejecucion --> Espera : pide E/S o un evento
-    Espera --> Listo : termina la E/S o llega el evento
-    Ejecucion --> Terminado : exit
-    Terminado --> [*]
-```
+![Diagrama de estados de un proceso: Nuevo, Listo, Ejecución, Espera y Terminado, con las transiciones entre ellos](diagramas/estados-proceso.svg)
 
 | Estado | Significa |
 |---|---|

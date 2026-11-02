@@ -243,6 +243,8 @@ $$R(S_1)\cap W(S_2) = \varnothing \quad\land\quad W(S_1)\cap R(S_2) = \varnothin
 
 **Guía 38:** aristas S1→S3, S1→S4, S2→S4, S2→S5, S3→S6, S4→S6, S4→S7, S5→S7.
 
+![Guía 38: S4 espera a S1 y S2, S6 espera a S3 y S4, S7 espera a S4 y S5](diagramas/precedencia-guia-38.svg)
+
 ```
         c4 := 2;  c6 := 2;  c7 := 2;
         fork A2;            // S1 y S2 empiezan juntos
@@ -265,6 +267,8 @@ A7:     join c7;  S7;  quit;   // espera a S4 y a S5
 La misma precedencia **con semáforos** (un semáforo por arista, en 0: cada nodo hace `wait` por cada flecha que le llega y `signal` por cada una que sale) está en [`38-grafo-precedencia.cm`](programas/38-grafo-precedencia.cm). Se probó 3.000 veces y nunca viola el orden.
 
 **Guía 15** (la figura tiene **dos nodos "S7"**; llamamos **S9** al de abajo a la derecha). Aristas: S1→S2, S1→S3, S2→S4, S2→S5, S4→S7, S4→S6, S5→S6, S7→S8, S3→S8, S6→S9, S8→S9.
+
+![Guía 15: S6 espera a S4 y S5, S8 espera a S7 y S3, S9 espera a S6 y S8](diagramas/precedencia-guia-15.svg)
 
 ```
         c6 := 2;  c8 := 2;  c9 := 2;

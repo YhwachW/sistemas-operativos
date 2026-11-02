@@ -28,11 +28,7 @@ Cada proceso usa un recurso siempre en el orden **solicitud → uso → liberaci
 - **Arista de solicitud** `Pi → Rj` = vector `(Pi, Rj)`: Pi **pide** una instancia de Rj.
 - **Arista de asignación** `Rj → Pi` = vector `(Rj, Pi)`: una instancia de Rj **está asignada** a Pi.
 
-```mermaid
-flowchart LR
-    P1((P1)) -- pide --> R1[R1 •]
-    R1 -- asignado --> P2((P2))
-```
+En los dibujos de esta sección, la flecha **punteada** es una solicitud, la **continua** es una asignación y la **roja** es parte de un ciclo.
 
 ### Cómo decidir (reglas del curso)
 
@@ -55,16 +51,7 @@ Del dibujo: R1 (1 instancia), R2 (1 instancia), R3 (2 instancias).
 | P2 | R1 y 1 de R3 | R2 |
 | P3 | R2 | R3 |
 
-```mermaid
-flowchart LR
-    P1((P1)) --> R1[R1 •]
-    R1 --> P2((P2))
-    P2 --> R2[R2 •]
-    R2 --> P3((P3))
-    P3 --> R3[R3 • •]
-    R3 --> P1
-    R3 --> P2
-```
+![Recuperativa 2024-2: ciclo P1, R1, P2, R2, P3, R3; las dos instancias de R3 las tienen P1 y P2, que también esperan; hay interbloqueo](diagramas/grafo-recup-2024-2.svg)
 
 - **Ciclos:** P1 → R1 → P2 → R2 → P3 → R3 → P1 y P2 → R2 → P3 → R3 → P2.
 - R3 tiene 2 instancias, pero **las dos** las tienen P1 y P2, que están esperando. P3 pide R3 y nadie la va a soltar. Al reducir, **nadie** puede terminar.
@@ -86,11 +73,17 @@ flowchart LR
 | P5 | R1, R4 | R2 |
 | P6 | R1 | — |
 
+![Recuperativa 2026-1 y guía 29: sin ciclos; P2, P3, P4 y P6 no piden nada, terminan y liberan R1 y R2 para P5 y P1](diagramas/grafo-recup-2026-1.svg)
+
 - **No hay ciclos:** los que piden (P1, P5) esperan recursos que tienen procesos que **no piden nada** (P2, P3, P4, P6).
 - P2, P3, P4 y P6 terminan y liberan; después P5 obtiene R2, y al final P1 obtiene R1 y R2.
 - **Estado: seguro.** Secuencia posible: P2, P3, P4, P6, P5, P1.
 
 ### 3.3 Guía, problemas 5, 6 y 7
+
+![Guía 6: hay un ciclo P1, R2, P3, R3, pero R2 tiene dos instancias y una la tiene P2, que no pide nada; P2 termina, suelta R2 y el ciclo se rompe](diagramas/grafo-guia-6.svg)
+
+*El problema 6 es el ejemplo clave de "ciclo **sin** interbloqueo": compáralo con el de la [recuperativa 2024-2](#31-recuperativa-2024-2-problema-5-25-pts), donde nadie fuera del ciclo puede soltar nada.*
 
 | Problema | Qué hay | Resultado |
 |---|---|---|

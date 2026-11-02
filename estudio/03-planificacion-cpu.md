@@ -112,17 +112,9 @@ Un buen algoritmo **maximiza** utilización y throughput y **minimiza** turnarou
 | 6,3 | Termina J4. Esperan J5 (2), J3 (5,2) | Corre J5 |
 | 8,3 | Termina J5 | Corre J3 hasta 13,5 |
 
-```
-| J3 | J2 | J1 |  J2  |  J4  |  J5  |      J3      |
-0,5  1,3  1,6  2,6    4,3    6,3    8,3           13,5
-```
+**Round Robin q = 2 por iteraciones:** en cada vuelta se atiende en orden de llegada (J3, J2, J4, J1, J5). Es la segunda fila de la figura.
 
-**Round Robin q = 2 por iteraciones** (orden de llegada: J3, J2, J4, J1, J5):
-
-```
-|  J3  |  J2  |  J4  |J1|  J5  |  J3  |  J3  |
-0,5    2,5    4,5    6,5 7,5   9,5    11,5   13,5
-```
+![Parcial 2024-2: Gantt de SJF apropiativo (J3, J2, J1, J2, J4, J5, J3) y de Round Robin q=2 por iteraciones (J3, J2, J4, J1, J5, J3, J3); ambos terminan en 13,5](diagramas/gantt-2024-2.svg)
 
 | Proceso | SJF-P T.T. | SJF-P W.T. (libro) | W.T. (pauta) | RR T.T. | RR W.T. (libro) | W.T. (pauta) |
 |---|---|---|---|---|---|---|
@@ -143,13 +135,7 @@ Un buen algoritmo **maximiza** utilización y throughput y **minimiza** turnarou
 | Monse (P2) | 0,8 | 2 | 0 |
 | Prg1 (P3) | 0,5 | 3 | 2 |
 
-```
-FCFS:            |    Azul    |   Prg1   |  Monse |
-                 0,1          4,1        7,1      9,1
-
-SJF apropiativo: |Azul|Prg1|  Monse |  Prg1  |   Azul    |
-                 0,1  0,5  0,8      2,8      5,5         9,1
-```
+![Recuperativa 2024-2: FCFS y SJF apropiativo; en SJF Prg1 expulsa a Azul en 0,5 y Monse a Prg1 en 0,8](diagramas/gantt-recup-2024-2.svg)
 
 - En 0,5 llega Prg1 (3) y a Azul le quedan 3,6 → **Prg1 expulsa a Azul**.
 - En 0,8 llega Monse (2) y a Prg1 le quedan 2,7 → **Monse expulsa a Prg1**.
@@ -171,15 +157,7 @@ SJF apropiativo: |Azul|Prg1|  Monse |  Prg1  |   Azul    |
 | P4 | 8,6 | 3 | 1 |
 | P5 | 10,9 | 2 | 0 |
 
-```
-Prioridad apropiativa:
-| P1 |  P2  |P1| P3 |P1| ocioso |  P4  |  P5  |P4|
-1,2  3,2    5,2 5,5  6,5 7,2      8,6    10,9   12,9 13,6
-
-SJF apropiativo  (= RR q=3 en este caso, porque ninguna ráfaga pasa de 3):
-|  P1  |  P2  | P3 | ocioso |  P4  |  P5  |
-1,2    4,2    6,2  7,2      8,6    11,6   13,6
-```
+![Prioridad apropiativa interrumpe dos veces a P1; con SJF y RR no hay interrupciones; la CPU queda ociosa entre 7,2 y 8,6](diagramas/gantt-2009-recup-2026.svg)
 
 > Fíjate en el **tiempo ocioso** de 7,2 a 8,6: nadie ha llegado, así que la CPU espera.
 
@@ -200,10 +178,7 @@ SJF apropiativo  (= RR q=3 en este caso, porque ninguna ráfaga pasa de 3):
 | 2 | 1,3 | 2 |
 | 3 | 1,4 | 1 |
 
-```
-SJF apropiativo: |2|  3 |    2    |     1      |      RR q=2: |    2    |  3 |   1    | 1 |
-                 1,3 1,4 2,4       4,3          7,3            1,3       3,3  4,3      6,3 7,3
-```
+![Examen 2026-1: en SJF el proceso 3 expulsa al 2 en 1,4; en RR el proceso 1 usa dos quanta seguidos](diagramas/gantt-examen-2026-1.svg)
 
 En 1,4 llega J3 (1) y a J2 le quedan 1,9 → J3 expulsa a J2.
 
@@ -224,17 +199,9 @@ En 1,4 llega J3 (1) y a J2 le quedan 1,9 → J3 expulsa a J2.
 | P4 | 8,6 | 11 | 0 |
 | P5 | 10,9 | 14 | 4 |
 
-```
-FCFS:   | P1 1,2–13,2 | P2 –22,2 | P3 –30,2 | P4 –41,2 | P5 –55,2 |
+![P1 2025-2: los cuatro algoritmos sobre los mismos procesos; SJF apropiativo tiene el menor turnaround promedio](diagramas/gantt-2025-2.svg)
 
-SJF-P:  | P1 1,2–3,2 | P2 –12,2 | P3 –20,2 | P1 –30,2 | P4 –41,2 | P5 –55,2 |
-        (en 3,2 llega P2 con 9 y a P1 le quedan 10 → P2 expulsa a P1)
-
-Prio-P: | P1 –3,2 | P2 –5,5 | P3 –8,6 | P4 –19,6 | P3 –24,5 | P2 –31,2 | P5 –45,2 | P1 –55,2 |
-
-RR q=3 (iteraciones): P1 P2 P3 P4 P5 | P1 P2 P3 P4 P5 | P1 P2 P3 P4 P5 | P1 P4 P5 | P5
-        1,2 4,2 7,2 10,2 13,2 16,2 19,2 22,2 25,2 28,2 31,2 34,2 37,2 39,2 42,2 45,2 48,2 50,2 53,2 55,2
-```
+*En SJF apropiativo, en 3,2 llega P2 (9) y a P1 le quedan 10: P2 expulsa a P1.*
 
 | Algoritmo | T.T. promedio | W.T. promedio (libro) | W.T. promedio (pauta) |
 |---|---|---|---|
@@ -253,13 +220,7 @@ RR q=3 (iteraciones): P1 P2 P3 P4 P5 | P1 P2 P3 P4 P5 | P1 P2 P3 P4 P5 | P1 P4 P
 | T2 | 5 | 2,3 |
 | T3 | 2 | 5,2 |
 
-```
-FCFS:    |       T1        |   T2   | T3 |          SJF NA:  |       T1        | T3 |   T2   |
-         0,8               10,8     15,8 17,8                 0,8               10,8 12,8     17,8
-
-RR q=2:  | T1 | T2 | T1 | T2 | T3 | T1 |T2| T1 | T1 |
-         0,8  2,8  4,8  6,8  8,8  10,8 12,8 13,8 15,8 17,8
-```
+![P1 2022-2: FCFS, SJF no apropiativo y Round Robin q=2; en SJF no apropiativo T1 no se interrumpe y luego va T3 antes que T2](diagramas/gantt-2022-2.svg)
 
 > En SJF **no apropiativo** T1 no se interrumpe aunque lleguen trabajos más cortos: cuando termina en 10,8, elige T3 (2) antes que T2 (5).
 >

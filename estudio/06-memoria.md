@@ -32,6 +32,8 @@ Traducción: si `dirección lógica < límite`, entonces `física = base + lógi
 
 Base = 0x3000, Límite = 0x0C00 (3072 bytes). Dirección lógica 0x0B20, en modo usuario.
 
+![Protección con base y límite: si la dirección lógica es menor que el límite se le suma la base; si no, trap al sistema operativo](diagramas/base-limite.svg)
+
 - **b) ¿Es válida?** 0x0B20 = 11·256 + 2·16 + 0 = **2848**, y 0x0C00 = 12·256 = **3072**. Como 2848 < 3072, **es válida**.
 - **c) Dirección física** = 0x3000 + 0x0B20 = **0x3B20** (12288 + 2848 = 15136).
 

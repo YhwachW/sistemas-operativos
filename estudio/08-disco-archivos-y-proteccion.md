@@ -37,6 +37,8 @@ $$t_{\text{acceso}} = \underbrace{t_{\text{búsqueda}}}_{\text{mover el brazo (s
 | C-SCAN | 125 → … → 450 → **499 → 0** → 30 → 100 → 110 | **983** (con el salto) |
 | C-LOOK | 125 → … → 450 → **30** → 100 → 110 | **825** (con el salto) |
 
+![Guía 20: recorrido del cabezal con los seis algoritmos; SSTF recorre 545 cilindros y FCFS 1087](diagramas/disco-guia-20.svg)
+
 **Cómo se calcula** (ejemplo LOOK): sube de 125 a 450, que son **325** cilindros; baja de 450 a 30, que son **420**. Total = 745.
 
 **SSTF paso a paso:** desde 125, lo más cerca es 135 (10) y no 110 (15); desde 135 → 140; desde 140, 110 está a 30 y 192 a 52, así que va a 110; luego 100 y 30, y recién después sube hasta 450.

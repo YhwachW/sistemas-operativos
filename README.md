@@ -38,6 +38,7 @@ Programas en Python, sin instalar nada extra ([instrucciones](herramientas/READM
 | [`memoria.py`](herramientas/memoria.py) | El problema "procesos A, B, C": marcos, fallas, fragmentación, permanencia |
 | [`reemplazo.py`](herramientas/reemplazo.py) | FIFO, Óptimo y LRU paso a paso, con la tabla de entradas y salidas |
 | [`disco.py`](herramientas/disco.py) | FCFS, SSTF, SCAN, LOOK, C-SCAN, C-LOOK |
+| [`diagramas.py`](herramientas/diagramas.py) | Regenera las figuras de `estudio/diagramas/` desde los mismos simuladores |
 
 Los ejercicios de semáforos están como **programas C-- que se ejecutan** en [`estudio/programas/`](estudio/programas/): en jBACI o en el celular con [Mini BACI](https://yhwachw.github.io/mini-baci/). Tus ejercicios propios de jBACI (impresora, tráfico, estacionamiento) están en [`estudio/programas/ejercicios-jbaci/`](estudio/programas/ejercicios-jbaci/).
 

@@ -31,15 +31,9 @@ En la pauta 2013 se ve explícito ("Iteración N° 1, Iteración N° 2…"). Com
 
 **¿Cuándo da distinto que el libro?** Cuando un proceso llega *mientras* otro gasta su quantum y después le toca a un proceso que ya había corrido. Ejemplo real (Prueba 1 2024-2, q = 2):
 
-```
-Procesos: J3 (llega 0,5; ráfaga 6), J2 (1,3; 2), J4 (1,5; 2), J1 (1,6; 1), J5 (5,6; 2)
+![Round Robin q=2: por iteraciones J5 corre de 7,5 a 9,5; con la cola del libro J3 va antes y J5 corre de 9,5 a 11,5](diagramas/rr-iteraciones-vs-cola.svg)
 
-Por iteraciones (pauta):  |J3|J2|J4|J1|J5|J3|J3|      -> J5 termina en 9,5
-                          0,5 2,5 4,5 6,5 7,5 9,5 11,5 13,5
-
-Cola del libro:           |J3|J2|J4|J1|J3|J5|J3|      -> J5 termina en 11,5
-                          0,5 2,5 4,5 6,5 7,5 9,5 11,5 13,5
-```
+*Procesos: J3 (llega 0,5; ráfaga 6), J2 (1,3; 2), J4 (1,5; 2), J1 (1,6; 1), J5 (5,6; 2). La única diferencia es el orden de J3 y J5 después de 7,5.*
 
 En la cola del libro, J3 volvió a la cola en 2,5 (antes de que J5 llegara en 5,6), así que va primero. En la vuelta del profesor, J5 está "más adelante en el orden de llegada" que J3 y se atiende en la primera vuelta.
 
