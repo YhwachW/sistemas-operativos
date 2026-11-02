@@ -599,6 +599,21 @@ def diagrama_guia7():
                            (440, 360, 'espera R2 (lo tiene P3):', 'acct'), (440, 376, 'bloqueado por arrastre', 'acct')])
 
 
+# ------------------------------------------------------------------ prueba 1: ensayo
+def diagramas_prueba1():
+    print('Prueba 1 (ensayo)')
+    ps = [P('A', '0,4', 5, 3), P('B', '1,1', 3, 1), P('C', '2', 7, 4), P('D', '3,5', 2, 0), P('E', '4,2', 4, 2)]
+    gantt('ensayo-p1-gantt.svg', [
+        {'titulo': 'FCFS · T.T. prom. 11,36', 'segs': plan(ps, 'fcfs')},
+        {'titulo': 'SJF apropiativo · T.T. prom. 8,98 (el mejor)', 'segs': plan(ps, 'srtf')},
+        {'titulo': 'Prioridad apropiativa · T.T. prom. 9,26', 'segs': plan(ps, 'prio_p')},
+        {'titulo': 'Round Robin q = 2 por iteraciones · T.T. prom. 13,56', 'segs': plan(ps, 'rr_vueltas', 2)},
+    ], ['A', 'B', 'C', 'D', 'E'], 'Ensayo prueba 1, problema 1: los cuatro algoritmos; SJF apropiativo tiene el menor turnaround promedio', ancho=860)
+    gantt('ensayo-p2-linea.svg', [
+        {'titulo': 'Proceso P con prioridad máxima: llega en 2 y termina en 17', 'segs': [('CPU', F(2), F(5)), ('E/S', F(5), F(9)), ('CPU', F(9), F(11)), ('E/S', F(11), F(12)), ('CPU', F(12), F(17))]},
+    ], ['CPU', 'E/S'], 'Ensayo prueba 1, problema 2: CPU de 2 a 5, E/S de 5 a 9, CPU de 9 a 11, E/S de 11 a 12, CPU de 12 a 17; tiempo de retorno 15')
+
+
 if __name__ == '__main__':
     diagramas_planificacion()
     diagrama_estados()
@@ -610,3 +625,4 @@ if __name__ == '__main__':
     diagrama_base_limite()
     diagramas_reemplazo()
     diagrama_disco()
+    diagramas_prueba1()
