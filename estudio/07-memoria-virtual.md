@@ -52,6 +52,8 @@ Cada entrada de la tabla de páginas tiene un **bit de validez**. Si es 0 (la p�
 | **Óptimo (OPT)** | La que **más tarde se volverá a usar** (o nunca) | El mejor posible, pero necesita conocer el futuro. Sirve para comparar |
 | **LRU** | La que **hace más tiempo que no se usa** | Aproxima al óptimo mirando el pasado. Necesita hardware (contadores o pila) |
 
+> **Anomalía de Belady:** con FIFO, **más marcos pueden dar más fallas**. Con la cadena 1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5, FIFO tiene **9 fallas con 3 marcos** y **10 con 4 marcos**. Compruébalo con `python herramientas/reemplazo.py fifo 3 "1,2,3,4,1,2,5,1,2,3,4,5"` y luego con 4. Óptimo y LRU nunca tienen esta anomalía.
+
 ### Cómo resolverlo a mano
 
 1. Dibuja una tabla: una **columna por referencia** y una **fila por marco**.
