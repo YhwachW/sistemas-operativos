@@ -6,7 +6,7 @@
 | **3** | Procesos: estados, PCB, cambio de contexto, planificadores, creación, IPC, hilos | [02 · Procesos e hilos](../estudio/02-procesos-e-hilos.md) |
 | **5** | Planificación de CPU: FCFS, SJF, SRTF, prioridad, Round Robin, quantum | [03 · Planificación de CPU](../estudio/03-planificacion-cpu.md) |
 
-> **No entra:** banquero e interbloqueo (cap. 8), memoria y paginación. Ojo: en las P1 anteriores **sí** venía el banquero (2009, 2013, 2022, 2024), así que esas preguntas no te sirven para esta prueba.
+> **No entra:** memoria y paginación, ni el cap. 8: [banquero e interbloqueo](../estudio/05-interbloqueo.md) pasan a la **siguiente prueba**. Ojo: en las P1 anteriores **sí** venía el banquero (2009, 2013, 2022, 2024), así que esas preguntas no te sirven para esta prueba.
 
 ## Qué esperar
 
@@ -22,7 +22,7 @@ En las P1 anteriores, lo que corresponde a estos capítulos se repartió así:
 
 **Conclusión:** si dominas la planificación de CPU y te sabes las ~15 preguntas de concepto que se repiten, tienes cubierta la mayor parte de la prueba.
 
-## Plan de estudio (5 sesiones)
+## Plan de estudio (7 sesiones)
 
 | Sesión | Qué hacer | Material |
 |---|---|---|
@@ -30,7 +30,9 @@ En las P1 anteriores, lo que corresponde a estos capítulos se repartió así:
 | 2 | Leer **primero** las [convenciones del profesor](../estudio/00-convenciones-del-profesor.md#1-planificación-de-cpu) y después el capítulo 5 completo | [03](../estudio/03-planificacion-cpu.md) |
 | 3 | Resolver **a mano** los ejercicios de planificación de nivel 1 y 2, y comprobarlos con `planificacion.py` | [ejercicios.md](ejercicios.md) |
 | 4 | Ejercicios de nivel 3 y todas las preguntas de concepto, **sin mirar** las respuestas | [ejercicios.md](ejercicios.md) |
-| 5 | Hacer el **ensayo con reloj (90 min)** y corregirlo con la pauta | [ensayo.md](ensayo.md) → [pauta-ensayo.md](pauta-ensayo.md) |
+| 5 | Hacer el **ensayo 1 con reloj (90 min)** y corregirlo con la pauta | [ensayo.md](ensayo.md) → [pauta-ensayo.md](pauta-ensayo.md) |
+| 6 | Repasar lo que fallaste y hacer el **ensayo 2**: tiempo ocioso, CPU con E/S y `fork` | [ensayo-2.md](ensayo-2.md) → [pauta-ensayo-2.md](pauta-ensayo-2.md) |
+| 7 | Hacer el **ensayo 3**: algoritmos no apropiativos, cambio de contexto y elección del quantum | [ensayo-3.md](ensayo-3.md) → [pauta-ensayo-3.md](pauta-ensayo-3.md) |
 
 ## Lo que debes saber (marca lo que ya dominas)
 
@@ -80,7 +82,8 @@ En las P1 anteriores, lo que corresponde a estos capítulos se repartió así:
 | Archivo | Para qué |
 |---|---|
 | [ejercicios.md](ejercicios.md) | Todos los ejercicios de las pruebas anteriores y de la guía **que entran**, por nivel, con enlace a la solución |
-| [ensayo.md](ensayo.md) | Prueba de ensayo nueva al estilo del profesor (100 pts, 90 min) |
-| [pauta-ensayo.md](pauta-ensayo.md) | Pauta del ensayo, verificada con los simuladores |
+| [ensayo.md](ensayo.md) · [pauta](pauta-ensayo.md) | Ensayo 1 al estilo del profesor (100 pts, 90 min) |
+| [ensayo-2.md](ensayo-2.md) · [pauta](pauta-ensayo-2.md) | Ensayo 2: tiempo ocioso, procesos con E/S y `fork` |
+| [ensayo-3.md](ensayo-3.md) · [pauta](pauta-ensayo-3.md) | Ensayo 3: no apropiativos, cambio de contexto y quantum |
 
 Para la noche anterior: el [banco de preguntas](../estudio/09-preguntas-de-concepto.md#sistema-operativo-y-hardware) (secciones "Sistema operativo y hardware" y "Procesos, hilos y planificación") y la sección de planificación del [formulario](../estudio/formulario.md).

@@ -613,6 +613,38 @@ def diagramas_prueba1():
         {'titulo': 'Proceso P con prioridad máxima: llega en 2 y termina en 17', 'segs': [('CPU', F(2), F(5)), ('E/S', F(5), F(9)), ('CPU', F(9), F(11)), ('E/S', F(11), F(12)), ('CPU', F(12), F(17))]},
     ], ['CPU', 'E/S'], 'Ensayo prueba 1, problema 2: CPU de 2 a 5, E/S de 5 a 9, CPU de 9 a 11, E/S de 11 a 12, CPU de 12 a 17; tiempo de retorno 15')
 
+    ps2 = [P('P1', '1,5', 4, 3), P('P2', '2,3', 6, 1), P('P3', 3, 2, 2), P('P4', '4,8', 3, 4), P('P5', 18, 5, 0)]
+    gantt('ensayo2-p1-gantt.svg', [
+        {'titulo': 'FCFS · T.T. prom. 8,08', 'segs': plan(ps2, 'fcfs')},
+        {'titulo': 'SJF apropiativo · T.T. prom. 6,58 (el mejor)', 'segs': plan(ps2, 'srtf')},
+        {'titulo': 'Prioridad apropiativa · T.T. prom. 8,4', 'segs': plan(ps2, 'prio_p')},
+        {'titulo': 'Round Robin q = 3 por iteraciones · T.T. prom. 9,08', 'segs': plan(ps2, 'rr_vueltas', 3)},
+    ], ['P1', 'P2', 'P3', 'P4', 'P5'], 'Ensayo 2, problema 1: los cuatro algoritmos con la CPU ociosa de 16,5 a 18; SJF apropiativo tiene el menor turnaround promedio', ancho=860)
+    gantt('ensayo2-p2-linea.svg', [
+        {'titulo': 'Proceso X: llega en 0 y termina en 11', 'segs': [('CPU', F(0), F(2)), ('E/S', F(2), F(8)), ('CPU', F(8), F(11))]},
+        {'titulo': 'Proceso Y: llega en 1 y termina en 13', 'segs': [('Listo', F(1), F(2)), ('CPU', F(2), F(5)), ('E/S', F(5), F(10)), ('Listo', F(10), F(11)), ('CPU', F(11), F(13))]},
+    ], ['CPU', 'E/S', 'Listo'], 'Ensayo 2, problema 2: X usa la CPU de 0 a 2 y de 8 a 11; Y de 2 a 5 y de 11 a 13; la CPU está ociosa de 5 a 8')
+    ps3 = [P('T1', '0,6', 8, 3), P('T2', '1,4', 4, 1), P('T3', '2,7', 9, 5), P('T4', '3,3', 5, 2), P('T5', '4,9', 2, 4), P('T6', '6,2', 3, 0)]
+    gantt('ensayo3-p1-gantt.svg', [
+        {'titulo': 'FCFS · T.T. prom. 18,42', 'segs': plan(ps3, 'fcfs')},
+        {'titulo': 'SJF no apropiativo · T.T. prom. 14,25 (el mejor de los cuatro)', 'segs': plan(ps3, 'sjf')},
+        {'titulo': 'Prioridad no apropiativa · T.T. prom. 15,25', 'segs': plan(ps3, 'prio')},
+        {'titulo': 'Round Robin q = 3 por iteraciones · T.T. prom. 20,25', 'segs': plan(ps3, 'rr_vueltas', 3)},
+    ], ['T1', 'T2', 'T3', 'T4', 'T5', 'T6'], 'Ensayo 3, problema 1: FCFS, SJF no apropiativo, prioridad no apropiativa y Round Robin q=3; SJF no apropiativo tiene el menor turnaround promedio de los cuatro', ancho=860)
+    # Round Robin q=2 por iteraciones, con 0,5 de cambio de contexto entre procesos distintos.
+    ps4 = [P('X', 0, 5), P('Y', 1, 3), P('Z', 2, 4)]
+    segs, t = [], F(0)
+    for i, (n, a, b) in enumerate(plan(ps4, 'rr_vueltas', 2)):
+        if i:
+            segs.append(('Cambio', t, t + F(1, 2)))
+            t += F(1, 2)
+        segs.append((n, t, t + b - a))
+        t += b - a
+    assert t == 15
+    gantt('ensayo3-p2-gantt.svg', [
+        {'titulo': 'Round Robin q = 2 por iteraciones, con cambio de contexto de 0,5', 'segs': segs},
+    ], ['X', 'Y', 'Z', 'Cambio'], 'Ensayo 3, problema 2: Round Robin q=2 con seis cambios de contexto de 0,5; X termina en 15, Y en 11 y Z en 13,5', ancho=860)
+
 
 if __name__ == '__main__':
     diagramas_planificacion()
