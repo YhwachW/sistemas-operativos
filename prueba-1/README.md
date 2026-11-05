@@ -33,7 +33,7 @@ En las P1 anteriores, lo que corresponde a estos capítulos se repartió así:
 | 5 | Hacer el **ensayo 1 con reloj (90 min)** y corregirlo con la pauta | [ensayo.md](ensayo.md) → [pauta-ensayo.md](pauta-ensayo.md) |
 | 6 | Repasar lo que fallaste y hacer el **ensayo 2**: tiempo ocioso, CPU con E/S y `fork` | [ensayo-2.md](ensayo-2.md) → [pauta-ensayo-2.md](pauta-ensayo-2.md) |
 | 7 | Hacer el **ensayo 3**: algoritmos no apropiativos, cambio de contexto y elección del quantum | [ensayo-3.md](ensayo-3.md) → [pauta-ensayo-3.md](pauta-ensayo-3.md) |
-| 8 | Hacer el **ensayo 4**, con el formato que te anticiparon (sin confirmar): SJF, SJF Preemptive, RR, teoría y SJF/FCFS | [ensayo-4.md](ensayo-4.md) → [pauta-ensayo-4.md](pauta-ensayo-4.md) |
+| 8 | Hacer el **ensayo 4**: SJF, SJF Preemptive, RR, teoría y SJF/FCFS | [ensayo-4.md](ensayo-4.md) → [pauta-ensayo-4.md](pauta-ensayo-4.md) |
 
 ## Lo que debes saber (marca lo que ya dominas)
 
@@ -86,6 +86,6 @@ En las P1 anteriores, lo que corresponde a estos capítulos se repartió así:
 | [ensayo.md](ensayo.md) · [pauta](pauta-ensayo.md) | Ensayo 1 al estilo del profesor (100 pts, 90 min) |
 | [ensayo-2.md](ensayo-2.md) · [pauta](pauta-ensayo-2.md) | Ensayo 2: tiempo ocioso, procesos con E/S y `fork` |
 | [ensayo-3.md](ensayo-3.md) · [pauta](pauta-ensayo-3.md) | Ensayo 3: no apropiativos, cambio de contexto y quantum |
-| [ensayo-4.md](ensayo-4.md) · [pauta](pauta-ensayo-4.md) | Ensayo 4: SJF, SJF Preemptive, RR, teoría y SJF/FCFS (formato sin confirmar) |
+| [ensayo-4.md](ensayo-4.md) · [pauta](pauta-ensayo-4.md) | Ensayo 4: SJF, SJF Preemptive, RR, teoría y SJF/FCFS |
 
 Para la noche anterior: el [banco de preguntas](../estudio/09-preguntas-de-concepto.md#sistema-operativo-y-hardware) (secciones "Sistema operativo y hardware" y "Procesos, hilos y planificación") y la sección de planificación del [formulario](../estudio/formulario.md).

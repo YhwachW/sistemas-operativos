@@ -2,8 +2,6 @@
 
 > **Capítulos 1, 3 y 5** · 100 puntos · 90 minutos · Exigencia 60 %
 >
-> Sigue el formato que te anticiparon, que **no está confirmado**: SJF, SJF Preemptive, Round Robin, un problema teórico y otro ejercicio de SJF/FCFS en lugar del banquero. Los problemas y su puntaje son una estimación.
->
 > Hazla **con reloj y sin apuntes**. Después corrige con la [pauta](pauta-ensayo-4.md). Indica qué criterio usas (por ejemplo, "RR por iteraciones en orden de llegada"; "W.T. = T.T. − ráfaga").
 
 ---
