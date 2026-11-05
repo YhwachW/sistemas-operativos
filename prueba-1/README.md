@@ -87,5 +87,6 @@ En las P1 anteriores, lo que corresponde a estos capítulos se repartió así:
 | [ensayo-2.md](ensayo-2.md) · [pauta](pauta-ensayo-2.md) | Ensayo 2: tiempo ocioso, procesos con E/S y `fork` |
 | [ensayo-3.md](ensayo-3.md) · [pauta](pauta-ensayo-3.md) | Ensayo 3: no apropiativos, cambio de contexto y quantum |
 | [ensayo-4.md](ensayo-4.md) · [pauta](pauta-ensayo-4.md) | Ensayo 4: SJF, SJF Preemptive, RR, teoría y SJF/FCFS |
+| [preguntas-de-concepto.md](preguntas-de-concepto.md) | 27 preguntas de concepto de los capítulos 1, 3 y 5, con la respuesta lista |
 
 Para la noche anterior: el [banco de preguntas](../estudio/09-preguntas-de-concepto.md#sistema-operativo-y-hardware) (secciones "Sistema operativo y hardware" y "Procesos, hilos y planificación") y la sección de planificación del [formulario](../estudio/formulario.md).
