@@ -645,6 +645,24 @@ def diagramas_prueba1():
         {'titulo': 'Round Robin q = 2 por iteraciones, con cambio de contexto de 0,5', 'segs': segs},
     ], ['X', 'Y', 'Z', 'Cambio'], 'Ensayo 3, problema 2: Round Robin q=2 con seis cambios de contexto de 0,5; X termina en 15, Y en 11 y Z en 13,5', ancho=860)
 
+    pj = [P('J1', '1,2', 6), P('J2', 2, 4), P('J3', '3,1', 1), P('J4', '4,5', 3), P('J5', '5,7', 2)]
+    gantt('ensayo4-p1-gantt.svg', [
+        {'titulo': 'SJF no apropiativo · T.T. prom. 7,9', 'segs': plan(pj, 'sjf')},
+    ], ['J1', 'J2', 'J3', 'J4', 'J5'], 'Ensayo 4, problema 1: J1 de 1,2 a 7,2, J3 hasta 8,2, J5 hasta 10,2, J4 hasta 13,2 y J2 hasta 17,2', ancho=860)
+    pa = [P('A', '0,3', 7), P('B', 1, 5), P('C', '1,8', 2), P('D', '2,5', 1), P('E', '6,2', 3)]
+    gantt('ensayo4-p2-gantt.svg', [
+        {'titulo': 'SJF apropiativo · T.T. prom. 7,16', 'segs': plan(pa, 'srtf')},
+    ], ['A', 'B', 'C', 'D', 'E'], 'Ensayo 4, problema 2: A, B, C, D, C, B, E y A; termina en 18,3', ancho=860)
+    pr = [P('R1', '0,5', 5), P('R2', '1,2', 3), P('R3', 2, 6), P('R4', 6, 2), P('R5', 9, 4)]
+    gantt('ensayo4-p3-gantt.svg', [
+        {'titulo': 'Round Robin q = 2 por iteraciones · T.T. prom. 11,36', 'segs': plan(pr, 'rr_vueltas', 2)},
+        {'titulo': 'Round Robin q = 2 con la cola del libro · T.T. prom. 11,16', 'segs': plan(pr, 'rr', 2)},
+    ], ['R1', 'R2', 'R3', 'R4', 'R5'], 'Ensayo 4, problema 3: Round Robin q=2 por iteraciones y con la cola del libro; ambos terminan en 20,5', ancho=860)
+    pf = [P('F1', '0,7', 9), P('F2', '1,5', 2), P('F3', '2,2', 6), P('F4', 3, 1), P('F5', 20, 3)]
+    gantt('ensayo4-p5-gantt.svg', [
+        {'titulo': 'FCFS · T.T. prom. 10,68', 'segs': plan(pf, 'fcfs')},
+        {'titulo': 'SJF no apropiativo · T.T. prom. 9,48', 'segs': plan(pf, 'sjf')},
+    ], ['F1', 'F2', 'F3', 'F4', 'F5'], 'Ensayo 4, problema 5: FCFS y SJF no apropiativo; en ambos F1 corre primero y la CPU está ociosa de 18,7 a 20', ancho=860)
 
 if __name__ == '__main__':
     diagramas_planificacion()
