@@ -1,0 +1,37 @@
+/*
+  07-contador-monitor-y-semaforo.cm  (version simple)
+
+  - MONITOR "Contador": dos procesos suman al mismo valor sin chocar,
+    porque solo uno a la vez puede estar dentro del monitor.
+  - SEMAFORO "listo" (empieza en 0): el jefe espera a que los dos
+    trabajadores terminen antes de mostrar el resultado.
+
+  Resultado esperado: siempre "Total: 6".
+*/
+
+semaphore listo;
+
+monitor Contador {
+  int valor;
+  void sumar() { valor = valor + 1; }
+  int leer() { return valor; }
+  init { valor = 0; }
+}
+
+void trabajador(int id) {
+  int i;
+  for (i = 1; i <= 3; i++) sumar();
+  cout << "Trabajador " << id << " termino." << endl;
+  signal(listo);
+}
+
+void jefe() {
+  wait(listo);
+  wait(listo);
+  cout << "Total: " << leer() << endl;
+}
+
+void main() {
+  initialsem(listo, 0);
+  cobegin { trabajador(1); trabajador(2); jefe(); }
+}
