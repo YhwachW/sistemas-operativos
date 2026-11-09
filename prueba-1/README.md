@@ -6,7 +6,7 @@
 | **3** | Procesos: estados, PCB, cambio de contexto, planificadores, creación, IPC, hilos | [02 · Procesos e hilos](../estudio/02-procesos-e-hilos.md) |
 | **5** | Planificación de CPU: FCFS, SJF, SRTF, prioridad, Round Robin, quantum | [03 · Planificación de CPU](../estudio/03-planificacion-cpu.md) |
 
-> **No entra:** memoria y paginación, ni el cap. 8: [banquero e interbloqueo](../estudio/05-interbloqueo.md) pasan a la **siguiente prueba**. Ojo: en las P1 anteriores **sí** venía el banquero (2009, 2013, 2022, 2024), así que esas preguntas no te sirven para esta prueba.
+> **No entra:** memoria y paginación, ni el cap. 8: [banquero e interbloqueo](../estudio/05-interbloqueo.md) pasan a la **[Prueba 2](../prueba-2/)**. Ojo: en las P1 anteriores **sí** venía el banquero (2009, 2013, 2022, 2024), así que esas preguntas no te sirven para esta prueba.
 
 ## Qué esperar
 

@@ -5,6 +5,8 @@ Repositorio personal para preparar las pruebas de **Sistemas Operativos** (UTEM,
 ## Por dónde empezar
 
 > 📌 **¿Estudias para la Prueba 1 (capítulos 1, 3 y 5)?** Ve directo a [`prueba-1/`](prueba-1/): qué entra, plan de estudio, ejercicios por nivel y **cuatro ensayos con pauta**.
+>
+> 📌 **¿Estudias para la Prueba 2 (capítulos 8, 9 y 10)?** Ve a [`prueba-2/`](prueba-2/): interbloqueo, memoria y memoria virtual, con lo nuevo de los apuntes, ejercicios por nivel, preguntas de concepto y **un ensayo con pauta**.
 
 1. **[00 · Convenciones del profesor y errores de las pautas](estudio/00-convenciones-del-profesor.md)**: léelo primero. El profesor resuelve Round Robin y calcula el tiempo de espera de una forma distinta al libro, y algunas pautas tienen errores.
 2. Estudia los temas en orden (cada uno trae teoría, ejercicios de prueba resueltos y errores típicos).
