@@ -1,0 +1,77 @@
+/*
+  06-cafeteria-semaforo-y-monitor.cm
+
+  Una cafeteria con 2 mesas y 4 clientes. Hay un cocinero.
+
+  - SEMAFORO "mesas" (empieza en 2): solo 2 clientes pueden estar
+    sentados a la vez. El tercero y el cuarto esperan en wait(mesas).
+
+  - MONITOR "Mostrador": guarda la cola de pedidos. Los clientes dejan
+    su pedido con pedir(id) y el cocinero los saca con tomar().
+    Si no hay pedidos, el cocinero espera en waitc(hayPedido).
+
+  - SEMAFOROS "servido[i]" (empiezan en 0): el cliente i espera su plato
+    con wait(servido[i]) y el cocinero se lo entrega con signal(servido[i]).
+
+  Que observar en Mini BACI / jBACI:
+  - Semaforos: "mesas" baja a 0 y los otros clientes quedan esperando.
+  - Monitores: el cocinero en la cola de "hayPedido" cuando no hay pedidos,
+    y la variable Mostrador.pedidos subiendo y bajando (nunca pasa de 4).
+*/
+
+const int CLIENTES = 4;
+
+semaphore mesas;
+semaphore servido[CLIENTES];
+
+monitor Mostrador {
+  int cola[CLIENTES];
+  int ini, fin, pedidos;
+  condition hayPedido;
+
+  void pedir(int id) {
+    cola[fin] = id;
+    fin = (fin + 1) % CLIENTES;
+    pedidos = pedidos + 1;
+    signalc(hayPedido);
+  }
+
+  int tomar() {
+    int id;
+    if (pedidos == 0) waitc(hayPedido);
+    id = cola[ini];
+    ini = (ini + 1) % CLIENTES;
+    pedidos = pedidos - 1;
+    return id;
+  }
+
+  init { ini = 0; fin = 0; pedidos = 0; }
+}
+
+void cliente(int id) {
+  wait(mesas);
+  cout << "Cliente " << id << " se sienta y pide." << endl;
+  pedir(id);
+  wait(servido[id]);
+  cout << "Cliente " << id << " come y deja la mesa." << endl;
+  signal(mesas);
+}
+
+void cocinero() {
+  int i, id;
+  for (i = 1; i <= CLIENTES; i++) {
+    id = tomar();
+    cout << "Cocinero prepara el pedido del cliente " << id << endl;
+    signal(servido[id]);
+  }
+}
+
+void main() {
+  int i;
+  initialsem(mesas, 2);
+  for (i = 0; i < CLIENTES; i++) initialsem(servido[i], 0);
+  cobegin {
+    cliente(0); cliente(1); cliente(2); cliente(3); cocinero();
+  }
+  cout << "Cafeteria cerrada." << endl;
+}
