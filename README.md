@@ -49,7 +49,7 @@ Los ejercicios de semáforos están como **programas C-- que se ejecutan** en [`
 | Carpeta | Contenido |
 |---|---|
 | [`Pruebas y Pautas/`](Pruebas%20y%20Pautas/) | Pruebas y pautas 2009, 2013, 2022, 2024, 2025 y 2026 |
-| [`Apuntes/`](Apuntes/) | Diapositivas de clases: cap. 1 (Introducción), 3 (Procesos), 5 (Planificación) y 8 (Deadlocks), basadas en Silberschatz, *Operating System Concepts*, 10.ª ed. |
+| [`Apuntes/`](Apuntes/) | Diapositivas de clases: cap. 1 (Introducción), 3 (Procesos), 5 (Planificación), 8 (Deadlocks), 9 (Memoria principal) y 10 (Memoria virtual), basadas en Silberschatz, *Operating System Concepts*, 10.ª ed. |
 | [`Guias/`](Guias/) | Guía de ejercicios (43 problemas) |
 | `jBACI/` (solo en tu PC) | Simulador jBACI con sus manuales. Es un clon de [github.com/motib/jbaci](https://github.com/motib/jbaci) y **no se sube** a este repo (es otro repositorio). Tus ejercicios están copiados en `estudio/programas/ejercicios-jbaci/` |
 | [`Presentacion jBACI/`](Presentacion%20jBACI/) | Presentación "Cómo usar jBACI" |
